@@ -1,0 +1,181 @@
+
+\chapter*{GaMPEN Appendix}\label{ch:gampen_appendix}
+
+\section{Early Data Access}\label{sec_c2:ap:data_access}
+Currently, we are applying \gampen{} to real data, and will make the source code public in the Fall of 2022, along with documentation, tutorials, and trained models. Readers interested in using \gampen{} before the full public release can access the source code and trained models of \gampen{} by emailing the corresponding author of this paper. 
+
+The public data release for \gampen{} will be hosted at the following two locations:
+
+\begin{itemize}
+    \item \href{http://www.ghosharitra.com/}{http://www.ghosharitra.com/}
+    \item \href{http://www.astro.yale.edu/aghosh/}{http://www.astro.yale.edu/aghosh/}
+\end{itemize}
+
+
+\section{Extended Derivation for Bayesian Implementation of \gampen{}} \label{sec_c2:ap:mcd_deri}
+
+In variational inference, the posterior, $p(\boldsymbol{\omega} \mid \mathcal{D})$ in Equation \ref{eq:out_y_pred}, is replaced by an approximate variational distribution with an analytic form $q(\boldsymbol{\omega})$. Now, Equation \ref{eq:out_y_pred} can be written as
+
+\begin{equation}
+p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}) \approx \int p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}) q(\boldsymbol{\omega}) d \boldsymbol{\omega} .
+\label{eq:out_y_pred_vi}
+\end{equation}
+
+The choice of the variational distribution is arbitrary. 
+One such choice, introduced by \cite{gal_2016}, involves dropping different neurons from some layers in order to assess the impact on the model. 
+The dropout technique was introduced by \cite{Srivastava2014Dropout:Overfitting} in order to prevent neural networks from overfitting; they temporarily removed random neurons from the network according to a Bernoulli distribution, i.e., individual nodes were set to zero with a probability, $p$, known as the dropout rate. 
+
+In the variational application, we use dropouts to interrogate the model. 
+Specifically, 
+if $p_{i}$ is the probability of a neuron being turned off, and
+$\left[z_{i, j}\right]_{j=1}^{J_{i-1}}$ is a vector of length $J_{i-1}$ containing the Bernoulli-distributed random variables for unit $j=1, \ldots, J_{i-1}$ in the $(i-1)^{th}$ layer with probabilities $p_i$, then
+
+\begin{equation}
+%\begin{aligned}
+\boldsymbol{\omega}_{i} =\boldsymbol{M}_{i} \cdot \operatorname{diag}\left(\left[z_{i, j}\right]_{j=1}^{J_{i-1}}\right) ,
+%\end{aligned}
+\label{eq:bernoulli}
+\end{equation}
+
+\noindent
+where $\boldsymbol{M}_i$ is the $J_i \times J_{i-1}$ matrix of variational parameters to be optimized. 
+
+Thus, sampling from $q(\boldsymbol{\omega})$ is now equivalent to using dropouts on a set of layers, with weights $\boldsymbol{M}$ %corresponding to each 
+(i.e., $\boldsymbol{M}_i$ for the $i^{th}$ layer). 
+We perform inference on the trained network by 
+% Once the network has been trained, we can perform inference by 
+approximating Equation \ref{eq:out_y_pred_vi} with a Monte Carlo integration: 
+
+\begin{equation}
+\int p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}) q(\boldsymbol{\omega}) d \boldsymbol{\omega} \approx \frac{1}{T} \sum_{t=1}^{T} p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}_t) ,
+\end{equation}
+
+\noindent
+wherein we perform $T$ forward passes with dropout enabled and $\boldsymbol{\omega}_t$ is the set of weights during the $t$\textsuperscript{th} forward pass.
+
+\section{Extended Derivation of the Loss Function} \label{sec_c2:ap:final_loss_deri}
+
+
+As outlined in Equation \ref{eq:out_y_pred}, we seek the most likely set of model parameters given our training data, %$\mathcal{D}$, 
+i.e., we maximize 
+
+\begin{equation}
+p(\boldsymbol{\omega} \mid \mathcal{D}) \propto p(\mathcal{D} \mid \boldsymbol{\omega})p(\boldsymbol{\omega}) .
+\label{eq:bayes_rule}
+\end{equation}
+
+In Equation\,\ref{eq:bayes_rule}, $p(\boldsymbol{\omega})$ is the prior on the neural networks weights. The weight prior here is unimportant and what matters is the prior induced on the output parameters of \gampen{}. And as outlined above, we use an uninformative multivariate Gaussian prior to induce an uninformative prior on the output. Please refer to \cite{wilson_20} for a detained discussion on priors in Bayesian deep learning. 
+
+For a regression task using a standard CNN, wherein the network outputs predictions  $\hat{\boldsymbol{Y}}_{n}\left(\boldsymbol{\hat{X}}_{n}, \boldsymbol{\omega}\right)$ for true values $\boldsymbol{Y}_{n}$, one popular choice is to minimize the squared-error loss function $\sum_{n} \left\|\boldsymbol{Y}_n-\boldsymbol{\hat{Y}}_n\left(\boldsymbol{\hat{X}}_n, \boldsymbol{\omega}\right)\right\|^{2}$, where the sum over $n$ denotes a sum over the training set. However, in contrast to the traditional approach, for each new test image $\boldsymbol{\hat{X}}$, \gampen{} needs to predict the parameters of a multivariate Gaussian distribution, $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. 
+
+Now, as discussed in \S \ref{subsec_c2:mcd}, we replace $p(\boldsymbol{\omega} \mid \mathcal{D})$ in Equation \ref{eq:out_y_pred} with an approximating variational distribution $q(\boldsymbol{\omega})$. This is performed by minimizing their Kullback-Leibler (KL) divergence, a measure of the similarity between two distributions. Since minimizing the KL divergence is equivalent to maximizing the log-evidence lower bound,
+
+\begin{equation}
+\log \mathcal{L}_{\mathrm{VI}}= \int q(\omega) \log p( \left\{\boldsymbol{Y}_{n=1}^{N}\right\} \mid \left\{\boldsymbol{X}_{n=1}^N\right\}, \boldsymbol{\omega}) d \boldsymbol{\omega}  - \mathrm{KL}(q(\omega) \| p(\omega)) .
+\label{eq:log_likelihood_vi}
+\end{equation}
+
+\noindent
+The first term in Equation \ref{eq:log_likelihood_vi} is the log-likelihood for the output parameters for the training set, and as shown in \cite{gal_2016}, the KL term can be approximated as an $L_2$ regularization. Therefore, Equation \ref{eq:log_likelihood_vi} can be written as 
+
+\begin{equation}
+\log \mathcal{L}_{\mathrm{VI}} \sim \sum_{n=1}^{N} \log \mathcal{L}\left(\boldsymbol{Y}_{n}, \boldsymbol{\hat{Y}}_{n}\left(\boldsymbol{X}_{n}, \boldsymbol{\omega}\right)\right)-\lambda \sum_{i}\left\|\boldsymbol{\omega_{i}}\right\|^{2} ,
+\label{eq:log_likelihood_vi_2}
+\end{equation}
+
+\noindent
+where $\log \mathcal{L}\left(\boldsymbol{Y}_{n}, \boldsymbol{\hat{Y}}_{n}\left(\boldsymbol{X}_{n}, \boldsymbol{\omega}\right)\right)$ is the log-likelihood of the network predictions $\boldsymbol{\hat{Y}}_{n}\left(\boldsymbol{X}_{n}, \boldsymbol{\omega}\right)$ for training input $\boldsymbol{X}_n$ with true values $\boldsymbol{Y}_n$, $\lambda$ is the strength of the regularization term, and $\boldsymbol{\omega}_i$ are sampled from $q(\boldsymbol{\omega})$. 
+
+For the multivariate Gaussian distribution predicted by \gampen{}, $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$, we can write the log-likelihood of the network predictions (first-term on the right side in Equation \ref{eq:log_likelihood_vi_2}) as 
+
+\begin{equation}
+\log \mathcal{L} \propto  \sum_{n}  -\frac{1}{2}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right]^{\top} \boldsymbol{\hat{\Sigma}}_n^{-1}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right] -\frac{1}{2} \log [\operatorname{det}(\boldsymbol{\hat{\Sigma}}_n)] ,
+\label{eq:effective_log_likelihood}
+\end{equation}
+
+\noindent
+where $\boldsymbol{\hat{\mu}}_n$ and $\boldsymbol{\hat{\Sigma}}_n$ are the mean and covariance matrix of the multivariate Gaussian distribution predicted by \gampen{} for an image, $\boldsymbol{X}_n$. 
+
+We train \gampen{} by minimizing the negative log-likelihood of the output parameters for the training set, which by combining Eqs. \ref{eq:log_likelihood_vi_2} and \ref{eq:effective_log_likelihood}, can be written as
+
+\begin{equation}
+- \log \mathcal{L}_{VI} \propto  \sum_{n} \frac{1}{2}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right]^{\top} \boldsymbol{\hat{\Sigma_n}}^{-1}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right] + \frac{1}{2} \log [\operatorname{det}(\boldsymbol{\hat{\Sigma_n}})] + \lambda \sum_{i}\left\|\boldsymbol{\omega_{i}}\right\|^{2} .
+\label{eq:ap:final_loss_fn}
+\end{equation}
+
+\section{Additional Technical Details on \gampen{}}
+
+In Table \ref{tab_c2:network_layers}, we have outlined the various layers of the \gampen{} framework along with the important parameters of each layer and the corresponding activation functions.
+
+
+\begin{longtable}{cccc}
+    \caption{Structure of GaMPEN}\\
+    \label{tab_c2:network_layers}\\
+    \hline
+    \hline
+    Order & Type of Layer & Layer Description & Activation Function \\
+    \hline
+    \hline
+    \multicolumn{4}{c}{Upstream Spatial Transformer Network} \\
+        \hline 
+        \hline
+        1 & Input & Size: $239\times239$ & --  \\
+        %\hline
+        2 & Convolutional & Filters: 64 $\vert$ Size: 11 & ReLU\textsuperscript{a} \\
+        %\hline   
+        3 & Max-Pooling & Kernel Size: 3 $\vert$ Strides: 2 & -- \\
+        %\hline
+        4 & Convolutional & Filters: 96 $\vert$ Size: 9 & ReLU \\
+        %\hline
+        5 & Max-Pooling & Kernel Size: 3 $\vert$ Strides: 2 & -- \\
+        %\hline
+        6 & Fully Connected & No. of neurons: 32 & ReLU \\
+        %\hline
+        7 & Fully Connected & No. of neurons: 1 & Linear \\
+        %\hline
+        & & & \\
+        \hline
+        \hline
+        \multicolumn{4}{c}{Downstream Morphological Estimation Network} \\
+        \hline
+        \hline
+        1 & Input & Size: $239\times239$ & --  \\
+        2 & Convolutional & Filters: 64 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        3 & Dropout & - & - \\
+        4 & Convolutional & Filters: 64 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        5 & Max-Pooling & Kernel Size: 2 $\vert$ Strides: 2 & -- \\
+        6 & Dropout & - & - \\
+        7 & Convolutional & Filters: 128 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        8 & Dropout & - & - \\
+        9 & Convolutional & Filters: 128 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        10 & Max-Pooling & Kernel Size: 2 $\vert$ Strides: 2 & -- \\
+        11 & Dropout & - & - \\
+        12 & Convolutional & Filters: 256 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        13 & Dropout & - & - \\
+        14 & Convolutional & Filters: 256 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        15 & Dropout & - & - \\
+        16 & Convolutional & Filters: 256 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        17 & Max-Pooling & Kernel Size: 2 $\vert$ Strides: 2 & -- \\
+        18 & Dropout & - & - \\
+        19 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        20 & Dropout & - & - \\
+        21 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        22 & Dropout & - & - \\
+        23 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        24 & Max-Pooling & Kernel Size: 2 $\vert$ Strides: 2 & -- \\
+        25 & Dropout & - & - \\
+        26 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        27 & Dropout & - & - \\
+        28 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        29 & Dropout & - & - \\
+        30 & Convolutional & Filters: 512 $\vert$ Size: 3 $\vert$ Strides: 1 & ReLU \\
+        31 & Max-Pooling & Kernel Size: 2 $\vert$ Strides: 2 & -- \\
+        32 & Fully Connected & No. of neurons: 4096 & ReLU \\
+        33 & Dropout & - & - \\
+        34 & Fully Connected & No. of neurons: 4096 & ReLU \\
+        35 & Dropout & - & - \\
+        36 & Fully Connected & No. of neurons: 9 & Linear \\
+        \hline 
+        \multicolumn{4}{p{0.95\textwidth}}{\vspace{0.01cm} \small \textsuperscript{a} Rectified Linear Unit} \\
+        \multicolumn{4}{p{0.95\textwidth}}{\small \texttt{NOTE-} The dropout rate of the various layers are set according to the calibration step described in \S \ref{sec_c2:training}} \\
+\end{longtable}

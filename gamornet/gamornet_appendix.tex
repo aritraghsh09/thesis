@@ -1,0 +1,64 @@
+
+\chapter*{Appendix}\label{ch:gamornet_appendix}
+
+\section{Public Release of Code, Models, and Galaxy Morphological Classifications}\label{sec:ap:public_data_release}
+
+Here, we provide an outline of all the material that we make public as a part of this work. An up-to-date record of this public data release will also be maintained at \href{http://gamornet.ghosharitra.com}{http://gamornet.ghosharitra.com} and \href{http://www.astro.yale.edu/aghosh/gamornet.html}{http://www.astro.yale.edu/aghosh/gamornet.html} in case any of the URLs below stop working over time.   
+
+\subsection{\gamornet{} Source Code}\label{sec:ap:gamornet_source_code}
+
+\gamornet{} was implemented using TFLearn\,\,(\href{http://tflearn.org}{http://tflearn.org}), which is a high-level Application Program Interface for TensorFlow\,\,(\href{https://tensorflow.org}{https://tensorflow.org}), an open source library widely used for large-scale machine learning applications.
+
+The source code of \gamornet{} is maintained as a GitHub Repository and is available at \href{https://github.com/aritraghsh09/GaMorNet}{https://github.com/aritra ghsh09/GaMorNet}. Instructions for installing TFLearn and using \gamornet{} are available in the above GitHub repository. An implementation of \gamornet{} in Keras (\href{https://keras.io/}{https://keras.io/}) is also available at the above repository. 
+
+\subsection{\gamornet{} Trained Models }\label{sec:ap:gamornet_trained_models}
+
+Trained Models for both \gamornet{}-S and -C are being made available as a part of this data release. 
+
+For more details about the various stages of training, refer to \S\,\ref{sec:initial_training} \& \ref{sec:tf_intro}. All of the models below are being made available via Yale Astronomy's Public FTP service \href{ftp://ftp.astro.yale.edu/pub/aghosh/gamornet/trained_models}{\url{ftp://ftp.astro.yale.edu/pub/aghosh/gamornet/trained\textunderscore models}}. 
+
+You can copy and paste the above link into a browser window to download the files, or you can also issue the following commands from a terminal to login to the ftp server
+
+\begin{verbatim}
+ftp ftp.astro.yale.edu
+\end{verbatim}
+
+Use the username `anonymous' and keep the password field blank. After logging-in, do the following:
+
+\begin{verbatim}
+cd pub/aghosh/gamornet/<appropriate_subdirectory> 
+get <file_name>
+quit
+\end{verbatim}
+
+To list the files at your current location, you can use the `ls' command. 
+
+The various subdirectories are named as follows in the list below:
+
+\begin{enumerate}
+    \item \gamornet{}-S model trained only on simulations $\xrightarrow{}$ \path{/trained_models/SDSS/sim_rained/}
+    \item \gamornet{}-S model trained on simulations and transfer learned on real data $\xrightarrow{}$ \path{/trained_models/SDSS/tl/}
+    \item \gamornet{}-C model trained only on simulations $\xrightarrow{}$ \path{/trained\_models/CANDELS/sim_trained/}
+    \item \gamornet{}-C model trained on simulations and transfer learned on real data $\xrightarrow{}$ \path{/trained_models/CANDELS/tl/}
+\end{enumerate}
+
+Models 2 and 4 can be applied directly to SDSS \textit{g}-band data at $z\sim0$ and CANDELS \textit{H}-band data at $z\sim1$ (or data in other nearby bands), respectively, without any further training. However, if you plan to apply \gamornet{} to data that is different from the above mentioned data sets, we recommend using any of the models above and then transfer learning on your new data. The exact nature of the data will decide which of the models above is the best starting point for the transfer learning process. 
+
+For more information on how to load these models in TFLearn and use them, refer to the documentation of the \gamornet{} GitHub repository mentioned in Sec.~\ref{sec:ap:gamornet_source_code}.
+
+\subsection{ Tables with predicted probabilities and classifications}\label{sec:ap:prob_tables}
+                                                                          
+The predicted probabilities (of being disk-dominated, bulge-dominated, or indeterminate) and the final classifications for all the galaxies in our SDSS and CANDELS test sets, as determined by \gamornet{}-S and -C, are made available below as .txt files. These tables are the full versions of Tables~\ref{tab:lt_sdss} \&~\ref{tab:lt_candels}.
+
+Both the tables are being made available via Yale Astronomy's Public FTP service \href{ftp://ftp.astro.yale.edu/pub/aghosh/gamornet/pred_tables}{\url{ftp://ftp.astro.yale.edu/ pub/aghosh/gamornet/pred\_tables}}. Instructions for accessing the service from the command line can be found in \S\,\ref{sec:ap:gamornet_trained_models}. The two files are located according to the list below:
+
+\begin{itemize}
+    \item Full version of Table~\ref{tab:lt_sdss} corresponding to the SDSS data set $\xrightarrow{}$ \path{/pred_tables/pred_table_sdss.txt}
+    \item Full version of Table~\ref{tab:lt_candels} corresponding to the CANDELS data set $\xrightarrow{}$ \path{/pred_tables/pred_table_candels.txt}
+\end{itemize}
+
+\subsection{ GalaxySim Source Code }\label{sec:ap:galsim}
+
+The code that was used to simulate the galaxies described in \S\,.\ref{sec:simulation_code} is available as a GitHub repository at \href{https://github.com/aritraghsh09/GalaxySim}{https://git hub.com/aritraghsh09/GalaxySim}
+
+This code makes use of GALFIT\,\citep{galfit} to simulate idealized double component galaxies. Since the simulations of galaxy surface brightness profiles are independent of each other, the code could be trivially parallelized. Instructions for using GalaxySim are available in the above GitHub repository. 

@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% yale_thesis.tex
+% Alexander Cerjan
+% 2014/04/07
+%
+% A bare, sample template for a Yale PhD thesis using yalephd.cls
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[letterpaper,10pt]{yalephd}
+% remove draft option for final printing.
+% font size must be between 10pt-12pt.
+
+
+\usepackage{soul}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{hhline}
+%\usepackage{minted}
+\usepackage{listings}
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{longtable}
+
+\usepackage{booktabs}
+
+\usepackage{xcolor} % to access the named colour LightGray
+\definecolor{LightGray}{gray}{0.95}
+
+\usepackage{geometry} % you need this for yalephd.cls to work.
+\usepackage{graphicx} % you probably want the rest of these.
+\graphicspath{{./}{hsc_morph/}{gamornet/}{gampen/}{morph_den/}}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{amsfonts}
+\usepackage{wrapfig}
+\usepackage{amssymb}
+\usepackage{appendix}
+\usepackage{comment}
+\usepackage{cite}
+\usepackage{notoccite}
+\usepackage{sectsty}
+\usepackage[flushleft]{threeparttable}
+\usepackage{pdflscape}
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor = black, citecolor = blue}
+\usepackage{xcolor}
+\chapterfont{\Large\bfseries}
+\sectionfont{\large\bfseries}
+\usepackage{natbib}
+\usepackage{bibentry}
+\usepackage{commands}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\usepackage{fontspec}
+\newfontface{\bn}{kalpurush.ttf}
+
+
+\newcommand\sersic{S\'ersic}
+\newcommand\msun{$M_{\odot}$}
+\newcommand\gamornet{G\textsc{a}M\textsc{or}N\textsc{et}}
+\newcommand\gampen{GaMPEN}
+\newcommand\lenstronomy{LENSTRONOMY}
+\newcommand\gb{\textit{g}}
+\newcommand\rb{\textit{r}}
+\newcommand\ib{\textit{i}}
+
+
+\begin{document}
+
+% Need to define title before the abstract.
+\title{Investigating Galaxy Morphology in Large Surveys Using Machine Learning} % capitalize the first letter in every word except conjunctions and prepositions
+\author{\textbf{Aritra Ghosh} | \bn{অরিত্র ঘোষ}}
+\advisor{Prof. C. M. Urry}
+\date{December, 2023} % usually not \today.
+
+% All the stuff at the front of your thesis.
+\frontmatter
+
+\begin{abstract}
+asdjnfjins adsnfij snadijfn in iasndfinsjidnf ijjsndifjnsijdnf isjnadfn aoisjdfn iojansijdn
+\end{abstract}
+
+
+\maketitle
+\makecopyright{2023} % change as needed.
+\tableofcontents
+\listoffigures % remove this if you have no figures.
+\listoftables % remove this if you have no tables.
+
+\chapter{Acknowledgements} % this needs to be before \mainmatter.
+
+
+% Starts proper arabic numbering of pages and chapters.
+\mainmatter
+
+\input{./intro_and_conc/intro}
+\input{./gamornet/gamornet.tex}
+\begin{subappendices}
+    \input{./gamornet/gamornet_appendix.tex}
+\end{subappendices}
+\input{./gampen/gampen.tex}
+\begin{subappendices}
+    \input{./gampen/gampen_appendix.tex}
+\end{subappendices}
+\input{./hsc_morph/hsc_morph.tex}
+\begin{subappendices}
+    \input{./hsc_morph/hsc_morph_appendix.tex}
+\end{subappendices}
+\input{./morph_den/paper}
+\input{./intro_and_conc/conc}
+
+\backmatter
+
+\bibliographystyle{aasjournal}
+\bibliography{./export}
+
+\end{document}
