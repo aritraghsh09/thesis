@@ -32,7 +32,7 @@ refer to \S \ref{sec_c3:data}. As noted in \S \ref{sec_c3:conclusions}, users ma
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width = 0.47\textwidth]{flag_distr.png}
+    \includegraphics[width = 0.52\textwidth]{flag_distr.png}
     \caption{We exclude $\sim20\%$ of our downloaded galaxies due to different flags being triggered. The distribution of various flags that contribute to galaxies being excluded from our sample is shown in this figure. As can be seen, the large majority of exclusions are due to cosmic-ray hits (and hence, interpolated pixels). }
     \label{fig_c3:flag_distr}
 \end{figure}
@@ -165,39 +165,39 @@ Figures \ref{fig_c3:2d_uncer_mid_z} and \ref{fig_c3:2d_uncer_high_z} show the un
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_res_mid_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_res_mid_z.png}
     \caption{Residuals of the output parameters (difference between \gampen{} and GALFIT predictions) plotted against the values predicted by \gampen{} for all galaxies in the mid-z test set. See \S\,\ref{sec_c3:gampen_v_galfit} for details.}
     \label{fig_c3:2d_res_mid_z}
 \end{figure*}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_res_high_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_res_high_z.png}
     \caption{Residuals of the output parameters (difference between \gampen{} and GALFIT predictions) plotted against the values predicted by \gampen{} for all galaxies in the high-z test set. See \S\,\ref{sec_c3:gampen_v_galfit} for details.}
     \label{fig_c3:2d_res_high_z}
 \end{figure*}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_uncer_mid_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_uncer_mid_z.png}
     \caption{Uncertainties predicted by \gampen{} for each parameter plotted against the predicted values for the mid-z test set. The $\sigma$ for each parameter is defined as the width of the $68.27\%$ confidence interval. The line-shaded region in the top-left panel shows the region where we recommend transforming quantitative $L_B/L_T$ predictions to qualitative labels. See \S \ref{sec_c3:uncertainties} for details.}
     \label{fig_c3:2d_uncer_mid_z}
 \end{figure*}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_uncer_high_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_uncer_high_z.png}
     \caption{Uncertainties predicted by \gampen{} for each parameter plotted against the predicted values for the high-z test set. The $\sigma$ for each parameter is defined as the width of the $68.27\%$ confidence interval. The line-shaded region in the top-left panel shows the region where we recommend transforming quantitative $L_B/L_T$ predictions to qualitative labels. See \S \ref{sec_c3:uncertainties} for details.}
     \label{fig_c3:2d_uncer_high_z}
 \end{figure*}
 
 \section{Comparing \gampen{} and GALFIT's performance on smaller simulated galaxies} \label{ap:sec_c3:gapemn_v_galfit}
 
-\textbf{As shown in \S \ref{sec_c3:gampen_v_galfit}, GaMPEN and GALFIT systematically disagree more for galaxies with smaller sizes. To ascertain their relative performance, specifically for smaller galaxies, we ran our GALFIT pipeline (described in \S \ref{sec_c3:galfitting}) on $\sim5000$ simulated galaxies from each redshift bin with $R_e \leq 2\arcsec$. These galaxies were chosen randomly from the testing set of \gampen{} -- thus, none of them were used to train \gampen{}. Thereafter, we compared the results of this fitting procedure to the predictions made by \gampen{} on the same galaxies. The residuals obtained for both \gampen{} and GALFIT are shown in Figure \ref{fig_c3:gampen_v_galfit}}.
+As shown in \S \ref{sec_c3:gampen_v_galfit}, GaMPEN and GALFIT systematically disagree more for galaxies with smaller sizes. To ascertain their relative performance, specifically for smaller galaxies, we ran our GALFIT pipeline (described in \S \ref{sec_c3:galfitting}) on $\sim5000$ simulated galaxies from each redshift bin with $R_e \leq 2\arcsec$. These galaxies were chosen randomly from the testing set of \gampen{} -- thus, none of them were used to train \gampen{}. Thereafter, we compared the results of this fitting procedure to the predictions made by \gampen{} on the same galaxies. The residuals obtained for both \gampen{} and GALFIT are shown in Figure \ref{fig_c3:gampen_v_galfit}.
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{gampen_v_galfit.png}
+    \includegraphics[width = 0.95\textwidth]{gampen_v_galfit.png}
     \caption{Distribution of residuals for $\sim5000$ simulated galaxies in each redshift bin with $R_e \leq 2\arcsec$.  These galaxies were selected randomly from the simulation testing set. The top, middle, and bottom rows show the results for the low-, mid-, and high-z bins respectively. The boxes in the top-left corner of each panel show the median ($\tilde{\mu}$) and standard deviation ($\sigma$) of each residual distribution. The dashed black vertical line marks $x=0$. }
     \label{fig_c3:gampen_v_galfit}
 \end{figure*}

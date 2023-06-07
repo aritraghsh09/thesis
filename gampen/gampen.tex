@@ -1,6 +1,6 @@
 \chapter{GaMPEN: A Machine Learning Framework for Estimating Bayesian Posteriors of Galaxy Morphological Parameters \label{ch:gampen}}
 
-Originally published by the American Astronomical Society in \textit{The Astrophysical Journal}, Volume 935, Issue 2, pp. 138, DOI:\href{https://iopscience.iop.org/article/10.3847/1538-4357/ac7f9e}{10.3847/1538-4357/ac7f9e}\\
+Adapted from the version originally published by the American Astronomical Society in \textit{The Astrophysical Journal}, Volume 935, Issue 2, pp. 138, DOI:\href{https://iopscience.iop.org/article/10.3847/1538-4357/ac7f9e}{10.3847/1538-4357/ac7f9e}\\
 {\large \emph{Aritra Ghosh, C. Megan Urry, Amrit Rau, Laurence Perreault-Levasseur, Miles Cranmer, Kevin Schawinski, Dominic Stark, Chuan Tian, Ryan Ofman, Tonima Tasnim Ananna, Connor Auge, Nico Cappelluti, David B. Sanders, and Ezequiel Treister} }\\
 
 
@@ -15,9 +15,9 @@ We also demonstrate that we can apply categorical labels (i.e., classifications 
 
 
 \section{Introduction} \label{sec_c2:intro}
-For almost a century, starting with \citeauthor{hubble_1926} in \citeyear{hubble_1926}, astronomers have linked the morphology of galaxies to the physics of  galaxy formation and evolution. Morphology has been shown to be related to many fundamental properties of the galaxy and its environment, including galaxy mass, star formation rate, stellar kinematics, merger history, cosmic environment, the influence of supermassive black holes \citep[e.g.,][]{Bender1992DynamicallyProperties,Tremaine2002TheCorrelation,pozzetti_10, wuyts_11, Schawinski2014TheGalaxies, Huertas-Company2016MassCANDELS,powell_17, Shimakawa2021Subaru0.30.6, Dimauro2022CoincidenceGrowth}. Studying the morphology of large samples of galaxies at different redshifts is crucial in order to understand the physics of galaxy formation and evolution. 
+For almost a century, starting with \citeauthor{hubble_1926} in \citeyear{hubble_1926}, astronomers have linked the morphology of galaxies to the physics of  galaxy formation and evolution. Morphology has been shown to be related to many fundamental properties of the galaxy and its environment, including galaxy mass, star formation rate, stellar kinematics, merger history, cosmic environment, the influence of supermassive black holes \citep[e.g.,][]{Bender1992DynamicallyProperties,Tremaine2002TheCorrelation,pozzetti_10, wuyts_11, Schawinski2014TheGalaxies, Huertas-Company2016MassCANDELS,powell_17, shimakawa_2021, Dimauro2022CoincidenceGrowth}. Studying the morphology of large samples of galaxies at different redshifts is crucial in order to understand the physics of galaxy formation and evolution. 
 
-Over the last decade, machine learning (ML) has been increasingly employed by astronomers for a wide variety of tasks -- from identifying exoplanets to studying black holes \citep[e.g.,][]{ml_pz,ml_sz,Shallue2018IdentifyingKepler-90,Sharma2020ApplicationClassification,Natarajan2021QuasarNet:Holes}. Especially, Convolutional Neural Networks (CNNs)\footnote{CNNs are a specific form of machine learning algorithm that specializes in processing data with a grid-like topology, such as an image. See \S \ref{sec_c2:cnn_description} for more details.} have revolutionized the field of image processing and have become increasingly popular for determining galaxy morphology \citep[e.g.,][]{Dieleman2015Rotation-invariantPrediction, Huertas-Company2015ALEARNING, Tuccillo2018DeepFitting, Hausen2020MorpheusData, Walmsley2020GalaxyLearning, Cheng2021GalaxyNetworks, Vega-Ferrero2021PushingSurvey, Tarsitano2022ImageLearning}. Previously, we have developed a publicly available CNN, called \gamornet{} \citep{Ghosh2020GalaxyGalaxies}, that classifies galaxies morphologically with minimal real training data, and has been demonstrated to achieve accuracy $\gtrsim 95\%$ across multiple datasets. 
+Over the last decade, machine learning (ML) has been increasingly employed by astronomers for a wide variety of tasks -- from identifying exoplanets to studying black holes \citep[e.g.,][]{ml_pz,ml_sz,Shallue2018IdentifyingKepler-90,Sharma2020ApplicationClassification,Natarajan2021QuasarNet:Holes}. Especially, Convolutional Neural Networks (CNNs)\footnote{CNNs are a specific form of machine learning algorithm that specializes in processing data with a grid-like topology, such as an image. See \S \ref{sec_c2:cnn_description} for more details.} have revolutionized the field of image processing and have become increasingly popular for determining galaxy morphology \citep[e.g.,][]{Dieleman2015Rotation-invariantPrediction, Huertas-Company2015ALEARNING, Tuccillo2018DeepFitting, Hausen2020MorpheusData, Walmsley2020GalaxyLearning, Cheng2021GalaxyNetworks, Vega-Ferrero2021PushingSurvey, Tarsitano2022ImageLearning}. Previously, in Chapter \ref{ch:gamornet}, we outlined \gamornet{} -- a publicly available CNN that classifies galaxies morphologically with minimal real training data and has been demonstrated to achieve accuracy $\gtrsim 95\%$ across multiple datasets. 
 
 This use of CNNs has been driven by the fact that traditional methods of classifying morphologies---visual classification and template fitting to the surface brightness profile of a galaxy---are not scalable to the data volume expected from future surveys such as The Vera Rubin Observatory Legacy Survey of Space and Time \citep[LSST;][]{lsst}, the Nancy Grace Roman Space Telescope \citep[NGRST;][]{ngrst}, and Euclid \citep{euclid}. The quality of fits obtained using template fitting depends significantly on the initial input parameters, and when dealing with millions of galaxies, such hand-refinement of input parameters is an intractable task. Although large citizen science projects like Galaxy Zoo \citep{gzoo_original} have been successful in processing many surveys in the past, even these will fail to keep up with the upcoming data glut. Moreover, reliable visual classifications require a decent signal-to-noise ratio, take time to set up and execute, and require an extremely careful de-biasing of the vote shares obtained \citep[e.g.,][]{gzoo_original,gzoo_candels}. 
 
@@ -96,13 +96,13 @@ Specifically, single-component galaxies were assigned a half-light radius betwee
 For the single-component galaxies, the total flux was varied between $10^3$ and $5\times10^6$ nJy ($m_{\mathrm{AB}}\sim14 - 23$). For the double component galaxies, we first draw $L_B/L_T$ from a uniform distribution between 0 and 1. Thereafter, the total flux of the galaxy is chosen from a uniform distribution with a range of $10^3 - 5\times10^6$ nJy. To assign fluxes to the bulge and disk components, we multiply $L_B/L_T$ and $(1 - L_B/L_T)$ respectively by the total flux. Not following this procedure and drawing the bulge and disk fluxes independently causes most galaxies in the training set to have a very high or a very low $L_B/L_T$, which is not the case for most galaxies, and in any case we already have single-component galaxies in our sample. For the double component sample, we wanted to have a sufficient number of galaxies with intermediate values of $L_B/L_T$.
 
 What matters in training a CNN is not matching the observed distributions of the simulation parameters; rather, it is spanning the full range of those parameters. 
-Having too many of any one type---even if that is the reality in real data---can result in lower accuracy for minority populations (e.g., \citealp{Ghosh2020GalaxyGalaxies}).
+Having too many of any one type---even if that is the reality in real data---can result in lower accuracy for minority populations (see \S \ref{sec:tf_intro} for details).
 By not weighting the simulated galaxy sample in any specific regions of the parameter space, we are able to optimize \gampen{} for the full range of galaxy morophologies.
 %a diverse set of galaxies and are also able to thoroughly investigate whether \gampen{} performs poorly in any specific regions of the parameter space.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width = 0.47\textwidth]{sim_process.png}
+    \includegraphics[width = 0.55\textwidth]{sim_process.png}
     \caption{Two stages of simulating an HSC galaxy. (\textit{Left}): A randomly chosen two-dimensional light profile generated by GalSim. (\textit{Right}): The same image after PSF convolution and noise addition. The white pixels represent (small) negative values that arise from the process of noise addition.}
     \label{fig_c2:sim_process}
 \end{figure}
@@ -161,7 +161,7 @@ Additionally, CNNs learn the spatial hierarchies of these patterns, allowing the
 \end{figure*}
 
 
-The architecture of \gampen{} is shown in Figure\,\ref{fig_c2:gampen_schematic}. It consists of a Spatial Transformer Network module followed by a downstream CNN module, described in \S\,\ref{subsec_c2:STN} and \ref{subsec_c2:cnn}, respectively. The design of \gampen{} is based on our previously successful classification CNN, \gamornet{} \citep{Ghosh2020GalaxyGalaxies}, as well as different variants of the Visual Geometry Group (VGG) networks \citep{vgg}, which are highly effective at large-scale visual recognition. We tried different architectures of these ``base" models by varying the depth of the entire network and the sizes of the various layers. To quickly and systematically search this model-design space, we use ModulosAI's\footnote{\href{https://www.modulos.ai}{https://www.modulos.ai}} AutoML platform, which uses a Bayesian optimization strategy. The said strategy involves using the current model's performance to determine which variant to try next. When choosing new configurations, the optimizer balances the exploitation of well-performing search spaces and the exploration of unknown regions.
+The architecture of \gampen{} is shown in Figure\,\ref{fig_c2:gampen_schematic}. It consists of a Spatial Transformer Network module followed by a downstream CNN module, described in \S\,\ref{subsec_c2:STN} and \ref{subsec_c2:cnn}, respectively. The design of \gampen{} is based on our previously successful classification CNN, \gamornet{} (Chapter \ref{ch:gamornet}), as well as different variants of the Visual Geometry Group (VGG) networks \citep{vgg}, which are highly effective at large-scale visual recognition. We tried different architectures of these ``base" models by varying the depth of the entire network and the sizes of the various layers. To quickly and systematically search this model-design space, we use ModulosAI's\footnote{\href{https://www.modulos.ai}{https://www.modulos.ai}} AutoML platform, which uses a Bayesian optimization strategy. The said strategy involves using the current model's performance to determine which variant to try next. When choosing new configurations, the optimizer balances the exploitation of well-performing search spaces and the exploration of unknown regions.
 
 To implement \gampen{}, we use PyTorch,
 %\footnote{\href{https://pytorch.org}{https://pytorch.org}}
@@ -258,7 +258,7 @@ To further validate the performance of our STN, we process all images in our tes
 \begin{figure}[htb]
     \centering
     \includegraphics[width
-    =0.45\textwidth]{real_galaxies_stn.png}
+    =0.55\textwidth]{real_galaxies_stn.png}
     \caption{Examples of the transformation applied by a trained STN to real HSC-Wide \textit{g}-band galaxies. The STN helps the downstream CNN to focus on the galaxy of interest at the center of the cutout by cropping out most secondary galaxies present in the input frame.}
     \label{fig_c2:real_galaxies_stn}
 \end{figure}
@@ -503,7 +503,7 @@ As outlined in Figure \ref{fig_c2:workflow} and \S \ref{subsec_c2:combining_unce
 \begin{figure}[htb]
     \centering
     \includegraphics[width
-    =0.47\textwidth]{corner.png}
+    =0.52\textwidth]{corner.png}
     \caption{Joint and marginalized probability distributions predicted by \gampen{} for a randomly chosen galaxy in our testing set. The red dotted lines show the true values of the parameters.}
     \label{fig_c2:corner}
 \end{figure}
@@ -630,7 +630,7 @@ Figure \ref{fig_c2:2d_residual_hists} shows the residuals for the three output p
 \begin{figure}[hbt]
     \centering
     \includegraphics[width
-    =0.45\textwidth]{residual_hist_bt_sep.png}
+    =0.53\textwidth]{residual_hist_bt_sep.png}
     \caption{Histograms of $L_B/L_T$ residuals shown separately for single component galaxies, all double component galaxies, and double component galaxies with $0.1 < L_B/L_T < 0.85$. The standard deviation ($\sigma$) for each distribution is also shown in the top left. The dashed vertical line represents $x = 0$, denoting cases with perfectly recovered $L_B/L_T$. The apparent hard cutoffs in the distributions of the single component, and the restricted range double-component galaxies arise from the fact that the y-scale is logarithmic. We have verified that when plotted on a linear scale, the apparent hard cutoffs disappear.}
     \label{fig_c2:residual_hist_bt_sep}
 \end{figure}
@@ -638,7 +638,7 @@ Figure \ref{fig_c2:2d_residual_hists} shows the residuals for the three output p
 \begin{figure*}[htb]
     \centering
     \includegraphics[width
-    =0.9\textwidth]{2d_hist_residuals_norm.png}
+    =\textwidth]{2d_hist_residuals_norm.png}
     \caption{Fractional residuals for the effective radius and flux plotted against their corresponding true values. Note that since we are plotting the absolute values, the ideal situation of perfectly recovered parameters is at the bottom of each panel. The right two panels show that both the residuals increase for fainter galaxies, while the top-middle panel shows that the radius residuals increase for smaller galaxies.}
     \label{fig_c2:2d_residual_hists_norm}
 \end{figure*}
@@ -661,7 +661,7 @@ Similarly, the right two panels show that the residuals of $R_e$ and $F$ are sys
 
 In other words, \gampen{} systematically becomes less accurate at predicting the radii of galaxies when their sizes become comparable to the seeing of the HSC-Wide Survey (\textit{g}-band median FWHM $\sim0.85\arcsec$). Similarly, \gampen{} finds it more challenging to predict the sizes and fluxes of fainter galaxies, just as one would expect.
 %. This is in line with the fact that fainter and smaller galaxies are inherently difficult to work with using any analysis technique. 
-With our previously published classification network, \gamornet{} \citep{Ghosh2020GalaxyGalaxies}, we observed a similar reduction in prediction accuracy for smaller and fainter galaxies. Figures \ref{fig_c2:2d_residual_hists}, \ref{fig_c2:2d_residual_hists_pred}, and \ref{fig_c2:2d_residual_hists_norm} help quantify the errors in \gampen{} predictions in different regions of parameter space. These will be essential in order to interpret results appropriately when applying \gampen{} to real galaxies. 
+With our previously published classification network, \gamornet{} (Chapter \ref{ch:gamornet}), we observed a similar reduction in prediction accuracy for smaller and fainter galaxies. Figures \ref{fig_c2:2d_residual_hists}, \ref{fig_c2:2d_residual_hists_pred}, and \ref{fig_c2:2d_residual_hists_norm} help quantify the errors in \gampen{} predictions in different regions of parameter space. These will be essential in order to interpret results appropriately when applying \gampen{} to real galaxies. 
 %We will also explore in \S \ref{subsec_c2:cuts} how transforming some of the predicted values can help us reduce the magnitude of the residuals. 
 
 \vspace{0.8cm}
@@ -735,7 +735,7 @@ The right panel of the top row shows the residual distributions including and ex
 \begin{figure}[htb]
     \centering
     \includegraphics[width
-    =0.5\textwidth]{confusion_matrix.png}
+    =0.45\textwidth]{confusion_matrix.png}
     \caption{Confusion matrix between the labels we assign when \gampen\ predicts extreme bulge-to-total ratios, $L_B/L_T <0.1$ or $>0.85$, and their true $L_B/L_T$ values. % for those galaxies. 
     The number in each block shows how many galaxies correspond to that panel, resulting in an overall accuracy $>99\%$.
     }
@@ -795,7 +795,7 @@ By testing \gampen{} on simulated HSC \textit{g}-band galaxies, where we have ac
 
 Note that, for this work, we trained and tested \gampen{} on single-band images. However, we have tested and verified that both the CNN and STN in \gampen{} can be easily adapted to intake an arbitrary number of channels, with each channel being a different band. To obtain separate morphological parameters for each band, the number of output parameters would need to be increased appropriately. We will perform a detailed evaluation of \gampen{}'s performance on multi-band images in future work.
 
-In this work, we performed a thorough analysis of \gampen{}'s performance using HSC $z < 0.25$ simulations. However, \gampen{} can be applied to a wide variety of other datasets -- including real HSC images, imaging from other ground and space-based observatories as well as higher redshift data. However, in order to apply \gampen{} to real data, one would need to perform appropriate transfer-learning (i.e., fine-tuning the simulation trained \gampen{} models using a small amount of data from the application dataset). We refer an interested reader to \citet{Ghosh2020GalaxyGalaxies}, where we performed transfer-learning and demonstrated the application of our classification framework, \gamornet{}, to SDSS $z\sim0$ and CANDELS $z\sim1$ data.
+In this work, we performed a thorough analysis of \gampen{}'s performance using HSC $z < 0.25$ simulations. However, \gampen{} can be applied to a wide variety of other datasets -- including real HSC images, imaging from other ground and space-based observatories as well as higher redshift data. However, in order to apply \gampen{} to real data, one would need to perform appropriate transfer-learning (i.e., fine-tuning the simulation trained \gampen{} models using a small amount of data from the application dataset). We refer an interested reader to \S \ref{sec:tf_intro}, where we performed transfer-learning and demonstrated the application of our classification framework, \gamornet{}, to SDSS $z\sim0$ and CANDELS $z\sim1$ data.
     
 Just like other image analysis methods, we expect \gampen{}'s performance to change based on the quality of the images being used (e.g., the pixel-scale of the survey, the noise, the redshift of the object). We will explore how \gampen{} performs in each of these above situations in future work.
 

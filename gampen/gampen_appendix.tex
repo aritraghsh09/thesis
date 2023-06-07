@@ -1,10 +1,8 @@
 
 \chapter*{GaMPEN Appendix}\label{ch:gampen_appendix}
 
-\section{Early Data Access}\label{sec_c2:ap:data_access}
-Currently, we are applying \gampen{} to real data, and will make the source code public in the Fall of 2022, along with documentation, tutorials, and trained models. Readers interested in using \gampen{} before the full public release can access the source code and trained models of \gampen{} by emailing the corresponding author of this paper. 
-
-The public data release for \gampen{} will be hosted at the following two locations:
+\section{Data Access}\label{sec_c2:ap:data_access}
+The public data release for \gampen{} is hosted at the following two locations:
 
 \begin{itemize}
     \item \href{http://www.ghosharitra.com/}{http://www.ghosharitra.com/}
@@ -66,7 +64,7 @@ p(\boldsymbol{\omega} \mid \mathcal{D}) \propto p(\mathcal{D} \mid \boldsymbol{\
 
 In Equation\,\ref{eq_c2:bayes_rule}, $p(\boldsymbol{\omega})$ is the prior on the neural networks weights. The weight prior here is unimportant and what matters is the prior induced on the output parameters of \gampen{}. And as outlined above, we use an uninformative multivariate Gaussian prior to induce an uninformative prior on the output. Please refer to \cite{wilson_20} for a detained discussion on priors in Bayesian deep learning. 
 
-For a regression task using a standard CNN, wherein the network outputs predictions  $\hat{\boldsymbol{Y}}_{n}\left(\boldsymbol{\hat{X}}_{n}, \boldsymbol{\omega}\right)$ for true values $\boldsymbol{Y}_{n}$, one popular choice is to minimize the squared-error loss function $\sum_{n} \left\|\boldsymbol{Y}_n-\boldsymbol{\hat{Y}}_n\left(\boldsymbol{\hat{X}}_n, \boldsymbol{\omega}\right)\right\|^{2}$, where the sum over $n$ denotes a sum over the training set. However, in contrast to the traditional approach, for each new test image $\boldsymbol{\hat{X}}$, \gampen{} needs to predict the parameters of a multivariate Gaussian distribution, $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. 
+\sloppy For a regression task using a standard CNN, wherein the network outputs predictions  $\hat{\boldsymbol{Y}}_{n}\left(\boldsymbol{\hat{X}}_{n}, \boldsymbol{\omega}\right)$ for true values $\boldsymbol{Y}_{n}$ , one popular choice is to minimize the squared-error loss function $\sum_{n} \left\|\boldsymbol{Y}_n-\boldsymbol{\hat{Y}}_n\left(\boldsymbol{\hat{X}}_n, \boldsymbol{\omega}\right)\right\|^{2}$, where the sum over $n$ denotes a sum over the training set. However, in contrast to the traditional approach, for each new test image $\boldsymbol{\hat{X}}$, \gampen{} needs to predict the parameters of a multivariate Gaussian distribution, $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. 
 
 Now, as discussed in \S \ref{subsec_c2:mcd}, we replace $p(\boldsymbol{\omega} \mid \mathcal{D})$ in Equation \ref{eq_c2:out_y_pred} with an approximating variational distribution $q(\boldsymbol{\omega})$. This is performed by minimizing their Kullback-Leibler (KL) divergence, a measure of the similarity between two distributions. Since minimizing the KL divergence is equivalent to maximizing the log-evidence lower bound,
 

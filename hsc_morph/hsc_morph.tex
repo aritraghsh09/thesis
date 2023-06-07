@@ -1,6 +1,6 @@
 \chapter{Morphological Parameters and Associated Uncertainties for 8 Million Galaxies in the Hyper Suprime-Cam Wide Survey} \label{chap:hsc_morph}
 
-Accepted for publication by the American Astronomical Society in \textit{The Astrophysical Journal} | Currently in press | Also available on arXiv: \href{https://arxiv.org/abs/2212.00051}{2212.00051}\\
+Adapted from the version available on arXiv: \href{https://arxiv.org/abs/2212.00051}{2212.00051} | Accepted for publication by the American Astronomical Society in \textit{The Astrophysical Journal (in press)} \\
 {\large \emph{Aritra Ghosh, C. Megan Urry, Aayush Mishra, Laurence Perreault-Levasseur, Priyamvada Nataranjan, David B. Sanders, Daisuke Nagai, Chuan Tian, Nico Cappelluti, Jeyhan S. Kartaltepe, Meredith C. Powell, Amrit Rau, and Ezequiel Treister}}\\
 
 
@@ -31,7 +31,7 @@ Most previous applications of ML to galaxy morphology produced broad, qualitativ
     \label{fig_c3:hsc_depth}
 \end{figure}
 
-In this paper, we use \gampen{} to estimate Bayesian posteriors for $L_B/L_T$, $R_e$, and $F$ for $\sim 8$ million galaxies with $z \leq 0.75$ from the Hyper Suprime-Cam (HSC) Wide survey \citep{hsc_design}. A few recent works have studied the morphology of smaller subsets of HSC galaxies: \citet{shimakawa_2021} classified $\sim2\times10^5$ massive HSC galaxies into spiral and non-spiral galaxies, while \citet{hsc_sersic} analyzed $\sim1.5\times10^6$ HSC galaxies using single-component \sersic{} fits. To date, the state-of-the-art morphological catalog that provided bulge+disk decomposition parameters at low redshift has been that of \citet{simard_11}, which used Sloan Digital Sky Survey \citep[SDSS; ][]{sdss_tech_summary} imaging to estimate morphological parameters of $\sim1$ million $m < 18$ galaxies, most with $z < 0.2$. As Figure \ref{fig_c3:hsc_depth} shows, HSC imaging allows us to probe much fainter magnitudes than SDSS with significantly better seeing (0.\arcsec85 for HSC-W \gb{} compared to 1.\arcsec4 for SDSS \gb{}). The catalog presented in this paper builds on \citet{simard_11} by providing an order of magnitude increase in sample size and probing four magnitudes deeper, to a higher redshift threshold. Along with estimates of parameters, this catalog also estimates robust uncertainties of the predicated parameters, which have typically been absent from previous large morphological catalogs. This catalog represents a significant step forward in our capability to quantify the shapes and sizes of galaxies in our universe. 
+In this chapter, we use \gampen{} to estimate Bayesian posteriors for $L_B/L_T$, $R_e$, and $F$ for $\sim 8$ million galaxies with $z \leq 0.75$ from the Hyper Suprime-Cam (HSC) Wide survey \citep{hsc_design}. A few recent works have studied the morphology of smaller subsets of HSC galaxies: \citet{shimakawa_2021} classified $\sim2\times10^5$ massive HSC galaxies into spiral and non-spiral galaxies, while \citet{hsc_sersic} analyzed $\sim1.5\times10^6$ HSC galaxies using single-component \sersic{} fits. To date, the state-of-the-art morphological catalog that provided bulge+disk decomposition parameters at low redshift has been that of \citet{simard_11}, which used Sloan Digital Sky Survey \citep[SDSS; ][]{sdss_tech_summary} imaging to estimate morphological parameters of $\sim1$ million $m < 18$ galaxies, most with $z < 0.2$. As Figure \ref{fig_c3:hsc_depth} shows, HSC imaging allows us to probe much fainter magnitudes than SDSS with significantly better seeing (0.\arcsec85 for HSC-W \gb{} compared to 1.\arcsec4 for SDSS \gb{}). The catalog presented in this paper builds on \citet{simard_11} by providing an order of magnitude increase in sample size and probing four magnitudes deeper, to a higher redshift threshold. Along with estimates of parameters, this catalog also estimates robust uncertainties of the predicated parameters, which have typically been absent from previous large morphological catalogs. This catalog represents a significant step forward in our capability to quantify the shapes and sizes of galaxies in our universe. 
 
 
 This paper also demonstrates that ML techniques can be used to study morphology in new surveys, which do not have already-classified large training sets available. Most previous works involving ML to study galaxy morphology have depended on the availability of an extensive training set of real galaxies with known properties from the same survey or a similar one. However, if Convolutional Neural Networks (CNNs) are to replace traditional methods for morphological analysis, we must be able to use them on new surveys that do not have a morphological catalog readily available to be used as a training set. In this paper, we demonstrate that by first training on simulations of galaxies and then using real data for transfer learning (fine-tuning the simulation-trained network), we can fully train \gampen{}, while having to label $<1\%$ of our dataset. This work outlines an easy pathway to apply morphological ML techniques to upcoming large imaging surveys.  
@@ -77,8 +77,8 @@ Sample & Redshift & Number & Imaging & Spectra \\
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width = 0.35\textwidth]{z_mag_distr.png}
-    \caption{Redshift ({\it top}) and magnitude ({\it bottom}) distributions for the $\sim8$ million galaxies used in this study.
+    \includegraphics[width = 0.95\textwidth]{z_mag_distr_old.png}
+    \caption{Redshift ({\it left}) and magnitude ({\it right}) distributions for the $\sim8$ million galaxies used in this study.
     We used spectroscopic redshifts when available and high-quality photometric redshifts otherwise. The spectroscopic completeness
     of each sub-sample is shown in Table \ref{tab_c3:data}.}
     \label{fig_c3:z_mag_distr}
@@ -207,7 +207,7 @@ Since most of the galaxies described in \S \ref{sec_c3:hsc_data} have not been m
 \begin{figure*}[htb]
     \centering
     \includegraphics[width
-    =0.8\textwidth]{full_gampen_workflow.png}
+    =0.83\textwidth]{full_gampen_workflow.png}
     \caption{Diagram outlining the different stages of training \gampen{}. We first train \gampen{} using simulated light profiles described in \S \ref{sec_c3:sim_data}. Thereafter, we fine-tune the simulation-trained framework using $0.5\%$ of our real data sample, for which we pre-determined the morphological parameters using light-profile fitting, as described in \S \ref{sec_c3:galfitting}. Finally, we process all the $\sim 8$ million galaxies in our dataset through the trained \gampen{} framework to obtain estimates of their morphological parameters and associated uncertainties.}
     \label{fig_c3:full_gampen_workflow}
 \end{figure*}
@@ -243,7 +243,7 @@ We describe each of the above steps in detail below.
 \subsection{Initial Training of \gampen{} on simulated galaxies} \label{sec_c3:sim_training}
 The purpose of training \gampen{} initially on simulations is two-fold. Firstly, it greatly reduces the amount of real data needed for training the framework. Secondly, since simulated galaxies are the only situation where we have access to the ``ground-truth" morphological parameters, they provide the perfect dataset to assess \gampen{}'s typical accuracy for the different output parameters. 
 
-In Chapter \ref{ch:gampen}, we extensively tested and reported on \gampen{}'s performance on simulated HSC $z \leq 0.25$ \gb{}-band galaxies. Here, we extend that to include simulated \rb{}-band $0.25 < z \leq 0.5$ and \ib{}-band $0.50 < z \leq 0.75$  galaxies. Out of the 150,000 galaxies simulated in each z-bin, we use $\mathbf{70\%}$ to train the framework and $15\%$ as a validation set to determine the optimum value for various hyper-parameters (such as learning rate, batch size, etc.). Thereafter, we use the remaining $15\%$, which the framework has never encountered before, to evaluate the performance of the trained framework. 
+In Chapter \ref{ch:gampen}, we extensively tested and reported on \gampen{}'s performance on simulated HSC $z \leq 0.25$ \gb{}-band galaxies. Here, we extend that to include simulated \rb{}-band $0.25 < z \leq 0.5$ and \ib{}-band $0.50 < z \leq 0.75$  galaxies. Out of the 150,000 galaxies simulated in each z-bin, we use $70\%$ to train the framework and $15\%$ as a validation set to determine the optimum value for various hyper-parameters (such as learning rate, batch size, etc.). Thereafter, we use the remaining $15\%$, which the framework has never encountered before, to evaluate the performance of the trained framework. 
 
 We train \gampen{} by minimizing its loss function using Stochastic Gradient Descent. The different hyper-parameters that need to be tuned are: the learning rate (the step size during gradient descent), momentum (acceleration factor used for faster convergence), the strength of L2 regularization (the degree to which larger weight values are penalized), and batch size (the number of images processed before weights and biases is updated). To choose these hyper-parameters, we trained \gampen{} with different sets of hyper-parameters and chose the ones that resulted in the lowest value for the loss function on the validation set. The final %set of 
 hyper-parameters for the trained models are given in Appendix \ref{ap:sec_c3:trained_models}.
@@ -265,7 +265,7 @@ We would like to note that \gampen{} does not explicitly predict the number of c
 \subsection{Transfer Learning using Real Data} 
 \label{sec_c3:transfer_learning}
 
-Transfer Learning as a data-science concept has been around since the late 1990s \citep[e.g.,][]{blum_1998} and involves taking a network trained on a particular dataset and optimized for a specific task, and re-tuning/fine-tuning the weights and biases for a slightly different task or dataset.  In \citet{gamornet_paper}, we introduced the concept of training on simulated light-profiles and then transfer learning using real data for galaxy morphology analysis. Here, we employ the same idea, taking the networks trained on the simulated galaxies and then employing transfer learning using $\sim15,000$ real HSC-Wide galaxies in each redshift bin.
+Transfer Learning as a data-science concept has been around since the late 1990s \citep[e.g.,][]{blum_1998} and involves taking a network trained on a particular dataset and optimized for a specific task, and re-tuning/fine-tuning the weights and biases for a slightly different task or dataset.  In Chapter \ref{ch:gamornet}, we introduced the concept of training on simulated light-profiles and then transfer learning using real data for galaxy morphology analysis. Here, we employ the same idea, taking the networks trained on the simulated galaxies and then employing transfer learning using $\sim15,000$ real HSC-Wide galaxies in each redshift bin.
 
 \begin{figure*}[htb]
     \centering
@@ -274,7 +274,7 @@ Transfer Learning as a data-science concept has been around since the late 1990s
     \label{fig_c3:tl_para_dist}
 \end{figure*}
 
-In order to select a sample of galaxies to use for transfer learning, we start with the galaxies summarized in Table \ref{tab_c3:data}. Note that what matters in training a CNN is not matching the observed distributions of the simulation parameters; rather, it is spanning the full range of those parameters with high fidelity. Having too many of a particular type---even if that is the reality in real data---can result in lower accuracy for minority populations (e.g., \citealp{gamornet_paper}). As seen in Figure \ref{fig_c3:z_mag_distr}, the sample for all three redshift bins is heavily biased towards fainter galaxies. To ensure that \gampen{} gets to train on enough bright galaxies, we split the mid- and high-z samples into two sub-samples: $m \leq 21$ and $m > 21$. For the low-z sample, since it has a more substantial tail towards the lower m values (compared to the mid- and high-z samples), we use  three sub-samples---$m \leq 18$, $18 < m \leq 20$, $m > 20$. We select 20,000 galaxies from each redshift bin, making sure to sample equally across the magnitude bins mentioned above. Thereafter, we determine their morphological parameters using light-profile fitting, as described later in \S \ref{sec_c3:galfitting}. The magnitude and redshift distributions of the selected galaxies are shown in Figure \ref{fig_c3:tl_para_dist}. As seen from the figure, the transfer learning sample has sufficiently large numbers of examples from all parts of the parameter space. This empowers us to optimize \gampen{} for the full range of galaxy morphologies.
+In order to select a sample of galaxies to use for transfer learning, we start with the galaxies summarized in Table \ref{tab_c3:data}. Note that what matters in training a CNN is not matching the observed distributions of the simulation parameters; rather, it is spanning the full range of those parameters with high fidelity. Having too many of a particular type---even if that is the reality in real data---can result in lower accuracy for minority populations (see \S \ref{sec:tf_intro}). As seen in Figure \ref{fig_c3:z_mag_distr}, the sample for all three redshift bins is heavily biased towards fainter galaxies. To ensure that \gampen{} gets to train on enough bright galaxies, we split the mid- and high-z samples into two sub-samples: $m \leq 21$ and $m > 21$. For the low-z sample, since it has a more substantial tail towards the lower m values (compared to the mid- and high-z samples), we use  three sub-samples---$m \leq 18$, $18 < m \leq 20$, $m > 20$. We select 20,000 galaxies from each redshift bin, making sure to sample equally across the magnitude bins mentioned above. Thereafter, we determine their morphological parameters using light-profile fitting, as described later in \S \ref{sec_c3:galfitting}. The magnitude and redshift distributions of the selected galaxies are shown in Figure \ref{fig_c3:tl_para_dist}. As seen from the figure, the transfer learning sample has sufficiently large numbers of examples from all parts of the parameter space. This empowers us to optimize \gampen{} for the full range of galaxy morphologies.
 
 Out of the 20,000 galaxies selected in each redshift bin, we use $75\%$ for fine-tuning the simulation trained \gampen{} models and another $5\%$ for selecting the various hyper-parameters to be used during the transfer learning process. The remaining $20\%$ is used to evaluate the performance of the fully trained \gampen{} frameworks in \S \ref{sec_c3:results}.
 
@@ -378,19 +378,28 @@ After both rounds of training are complete, we apply the final trained \gampen{}
 
 \subsection{Inspecting the Predicted Posteriors}
 
-\begin{figure*}[htb]
-    \centering
-    \includegraphics[width = 0.7\textwidth]{example_pred_dists.png}
-    \caption{Examples of predicted posterior distributions for two randomly chosen galaxies from each redshift bin. The blue shaded histograms show the predictions from \gampen{}, and the solid blue lines show the associated probability distribution functions estimated by kernel density estimation. These are used to calculate the confidence intervals shown in the figure with pink, yellow, and green shading. The mode (solid red line) shows the most probable value of each morphological parameter. As expected, in most cases, the GALFIT-ed value (dashed black line) lies within the $68.27\%$ confidence interval.}
-    \label{fig_c3:example_pred_dists}
-\end{figure*}
-
 
 Using the procedure outlined in Figure \ref{fig_c2:workflow}, we use the trained \gampen{} frameworks to obtain joint probability distributions of all the output parameters for each of the $\sim 8$ million galaxies. Figure \ref{fig_c3:example_pred_dists} shows the marginalized posterior distributions for six randomly selected galaxies; along with the input cutouts fed to \gampen{}. All the predicted distributions are unimodal, smooth, and resemble Gaussian/skewed-Gaussian distributions. For each predicted distribution, the figure also shows the parameter space regions that contain $68.27\%$, $95.45\%$, and $99.73\%$ of the most probable values of the integrated probability distribution. We use kernel density estimation to estimate the probability distribution function (PDF; shown by a blue line in the figure) from the predicted values. The mode of this PDF is what we refer to as the ``predicted value" henceforth. The figure also demonstrates how \gampen{} predicts distributions of different widths based on the input frame (e.g., the $L_B/L_T$ distribution in the second row is wider compared to the first row), and we will explore this in more detail in \S \ref{sec_c3:uncertainties}. 
 
 By design, \gampen{} predicts only physically possible values. This is especially apparent in the $L_B/L_T$ column of rows 1 and 4 of Figure \ref{fig_c3:example_pred_dists}. Note that to achieve this, we do not artificially truncate these distributions. Instead, we use data transformations, as outlined in \S \ref{sec_c2:training}. This ensures that the predicted $L_B/L_T$ values are always between 0 and 1. Similarly, we also ensure  that the $R_e$ and $F$ values predicted by \gampen{} are positive through appropriate transformations. 
 
 While performing quality checks on the predicted posteriors of all the $\sim 8$ million galaxies, we noticed that sometimes \gampen{} predicts $R_e$ and F values outside the parameter range on which it was trained (e.g., $m > 23$). It has been shown that while machine learning frameworks are excellent at interpolation, one should be extremely cautious while trying to extrapolate too much beyond the training set \citep[e.g.,][]{candela_09, recht_19, taori_20}. Thus, for each redshift bin, we exclude galaxies with predicted $R_e$ and $F$ values which are outside the upper and lower bounds of the training set by more than 0.5 arcsecs or 0.5 mags, respectively. This led to $\sim6\%$, $\sim2.5\%$, and $\sim1.2\%$ of the data being excluded in the low-, mid-, and high-z bins.
+
+\begin{figure*}[]
+    \begin{center}
+        \subfigure{\includegraphics[width=\textwidth]{example_pred_dists_1.png}} 
+        \subfigure{\includegraphics[width=\textwidth]{example_pred_dists_2.png}} 
+  \end{center}
+  \caption{Examples of predicted posterior distributions for two randomly chosen galaxies from each redshift bin. The blue shaded histograms show the predictions from \gampen{}, and the solid blue lines show the associated probability distribution functions estimated by kernel density estimation. These are used to calculate the confidence intervals shown in the figure with pink, yellow, and green shading. The mode (solid red line) shows the most probable value of each morphological parameter. As expected, in most cases, the GALFIT-ed value (dashed black line) lies within the $68.27\%$ confidence interval.}
+  \label{fig_c3:example_pred_dists}
+\end{figure*}
+
+%\begin{figure*}[]
+%    \centering
+%    \includegraphics[width = 0.7\textwidth]{example_pred_dists.png}
+%    \caption{Examples of predicted posterior distributions for two randomly chosen galaxies from each redshift bin. The blue shaded histograms show the predictions from \gampen{}, and the solid blue lines show the associated probability distribution functions estimated by kernel density estimation. These are used to calculate the confidence intervals shown in the figure with pink, yellow, and green shading. The mode (solid red line) shows the most probable value of each morphological parameter. As expected, in most cases, the GALFIT-ed value (dashed black line) lies within the $68.27\%$ confidence interval.}
+%    \label{fig_c3:example_pred_dists}
+%\end{figure*}
 
 \subsection{Evaluating the STN performance} \label{sec_c3:stn_performance}
 
@@ -420,7 +429,7 @@ Thus, \gampen{}'s STN learns to systematically crop out secondary galaxies in th
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.7\textwidth]{cov_prob_all_z.png}
+    \includegraphics[width = 0.85\textwidth]{cov_prob_all_z.png}
     \caption{Percentile coverage probabilities achieved on the test set shown separately for each redshift bin. The leftmost set of bars in each panel shows the coverage probabilities when averaged over the three output parameters, and the right three sets of bars show the coverage probabilities for each parameter individually. The mean coverage probability never deviates by more than $4.5\%$ from the claimed confidence interval, and when considered for each parameter separately, the coverage probability never deviates by more than $8.7\%$. This demonstrates that \gampen{} produces well-calibrated accurate uncertainties.}
     \label{fig_c3:cov_prob_all_z}
 \end{figure*}
@@ -431,7 +440,7 @@ In Figure \ref{fig_c3:cov_prob_all_z}, we show the coverage probabilities achiev
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.95\textwidth]{pred_true_all_z.png}
+    \includegraphics[width = \textwidth]{pred_true_all_z.png}
     \caption{The most probable parameter values predicted by \gampen{} for all galaxies in the test set plotted against the values determined using GALFIT. Galaxies are plotted in hexagonal bins of roughly equal size, and the number of galaxies in each bin is represented according to the logarithmic colorbar to the right of each panel. The top, middle, and bottom rows show the results for the low-, mid-, and high-z bins, respectively. The dashed black $y=x$ line represents the line of equality. Across all three redshift bins, values predicted by \gampen{} closely mirror the values obtained using light-profile fitting.}
     \label{fig_c3:pred_true_all_z}
 \end{figure*}
@@ -462,7 +471,7 @@ For most of the panels, the large majority of galaxies are clustered uniformly a
 For $L_B/L_T$ values near the edges (i.e., when the disk/bulge component completely dominates over the other component), precisely determining $L_B/L_T$ is challenging for \gampen{} --- in fact, this is difficult for any image analysis algorithm). In some of these cases, \gampen{} assigns almost the entirety of the light to the dominant component, resulting in the streaks seen at the edges of the figure. Poor structural parameter determination for galaxies with $L_B/L_T < 0.2$ and $L_B/L_T>0.8$ have also been independently observed in other studies using different algorithms \citep[e.g.,][]{euclid_morph, galapagos}
 
 
-In order to mitigate this, \gampen{} users can choose to transform \gampen{}'s quantitative predictions in the region $0.2 \geq L_B/L_T \geq 0.8$ (demarcated by shaded lines in Figure \ref{fig_c3:2d_res_low_z}) to qualitative values such as ``highly bulge-dominated" ($L_B/L_T \geq 0.8$) or ``highly disk-dominated" ($L_B/L_T \leq 0.2$). We followed a similar procedure in Chapter \ref{ch:gampen} and found the net accuracy of these labels to be $\gtrapprox95\%$.
+In order to mitigate this, \gampen{} users can choose to transform \gampen{}'s quantitative predictions in the region $0.2 \geq L_B/L_T \geq 0.8$ (demarcated by shaded lines in Figure \ref{fig_c3:2d_res_low_z}) to qualitative values such as ``highly bulge-dominated" ($L_B/L_T \geq 0.8$) or ``highly disk-dominated" ($L_B/L_T \leq 0.2$). We followed a similar procedure in Chapter \ref{ch:gampen} and found the net accuracy of these labels to be $\gtrapprox95\%$ (see Figure \ref{fig_c2:confusion_matrix}).
 
 \textcolor{black}{The top-middle panel of Figure \ref{fig_c3:2d_res_low_z} also shows that $L_B/L_T$ residuals are higher for galaxies with smaller $R_e$. In other words, \gampen{} and GALFIT systematically disagree more for galaxies with smaller sizes---and this effect becomes more pronounced as the sizes become comparable to the seeing of the HSC-Wide Survey (\textit{g}-band: $0.79$ arcsec).} 
 
@@ -526,14 +535,14 @@ It is likely that
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.95\textwidth]{gampen_v_simard.png}
+    \includegraphics[width = \textwidth]{gampen_v_simard.png}
     \caption{\gampen{} predictions plotted against values estimated by \citet{simard_11} for a cross-matched sample of $\sim20,000$ galaxies with $z < 0.2$ and $m < 19$. The density of points in each histogram is represented according to the logarithmic colorbar on the right. The black dots show the median y values in bins of equal width along the x-axis, with the error bars depicting the average $68.27\%$ and $95.45\%$ confidence intervals predicted by \gampen{} in that bin. The dash-dotted vertical line in the middle panel shows the median SDSS \gb{}-band seeing.}
     \label{fig_c3:gampen_v_simard}
 \end{figure*}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.95\textwidth]{gampen_v_lenstronomy.png}
+    \includegraphics[width = \textwidth]{gampen_v_lenstronomy.png}
     \caption{\gampen{} predictions plotted against values estimated by \citet{hsc_sersic} for a cross-matched sample of $\sim200,000$ galaxies with $0.5 < z \leq 0.75$ and $m \leq 23$. Similar to Figure \ref{fig_c3:gampen_v_simard}, we show the median y-values and associated error bars in bins of equal width along the x-axis. The dash-dotted vertical line in the middle panel shows the median HSC \ib{}-band seeing.}
     \label{fig_c3:gampen_v_lenstronomy}
 \end{figure*}
