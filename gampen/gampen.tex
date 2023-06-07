@@ -53,7 +53,7 @@ For both the bulge and disk components, we used the \sersic{} profile, the surfa
 
 \begin{equation}
 \Sigma(R) = \Sigma_e \exp \left[ -\kappa \left( \left( \frac{R}{R_e}\right)^{1/n} - 1 \right) \right] ,
-\label{eq:sersic_fn}
+\label{eq_c2:sersic_fn}
 \end{equation}
 
 \noindent
@@ -131,7 +131,7 @@ Artificial neural networks, consisting of many connected individual units called
 
 \begin{equation}
 y = \sigma(\bm{w} \cdot \bm{x} + b) ,
-\label{eq:neuron_output}
+\label{eq_c2:neuron_output}
 \end{equation}
 
 \noindent
@@ -210,22 +210,22 @@ y_{i}^{t} \\
 1
 \end{array}\right) ,
 \end{split}
-\label{eq:stn_transformation}
+\label{eq_c2:stn_transformation}
 \end{equation}
 
 \noindent
-where $ \left(x_i^s,y_i^s\right)$ are the source coordinates in the input image that define the sample points \citep{jarderberg_15}. The transformation shown in Equation\,\ref{eq:stn_transformation} allows for cropping, translation, rotation, and skewing to be applied to the input image. However, the simulated galaxy images in our dataset are already centered, and our primary aim of using the STN is to achieve optimal cropping; thus, we constrain the type of affine transformations allowed by modifying $\mathrm{A}_{\theta}$ such that 
+where $ \left(x_i^s,y_i^s\right)$ are the source coordinates in the input image that define the sample points \citep{jarderberg_15}. The transformation shown in Equation\,\ref{eq_c2:stn_transformation} allows for cropping, translation, rotation, and skewing to be applied to the input image. However, the simulated galaxy images in our dataset are already centered, and our primary aim of using the STN is to achieve optimal cropping; thus, we constrain the type of affine transformations allowed by modifying $\mathrm{A}_{\theta}$ such that 
 
 \begin{equation}
 \mathrm{A}_{\theta} = \left[\begin{array}{lll}
 s & 0 & 0 \\
 0 & s & 0
 \end{array}\right] .
-\label{eq:cropping_transformation}
+\label{eq_c2:cropping_transformation}
 \end{equation}
 
 \noindent
-The localization network predicts the optimal value of $s$ for each input image. As can be seen from Eq. \ref{eq:cropping_transformation}, $s=1$ results in an identity transformation (i.e., the image output by the STN and the input image are the same). For values of $s < 1$, lower fractions of the input image are retained in the output image. For example, when $s=0.7$, $70\%$ of each side (length/width) of the input image is retained in the output image.
+The localization network predicts the optimal value of $s$ for each input image. As can be seen from Eq. \ref{eq_c2:cropping_transformation}, $s=1$ results in an identity transformation (i.e., the image output by the STN and the input image are the same). For values of $s < 1$, lower fractions of the input image are retained in the output image. For example, when $s=0.7$, $70\%$ of each side (length/width) of the input image is retained in the output image.
 
 Note that although \gampen{}'s STN does not perform rotations, we are able to induce rotational invariance using our training procedure.  Since our simulated training set is very large, it happens to be that there are many galaxies with different position angles, but similar (other) structural parameters.
 
@@ -235,7 +235,7 @@ In the final step, the sampler takes the set of sampling points $\mathcal{T}_\th
 \begin{split}
 V_{i}^{c}=\sum_{n}^{H} \sum_{m}^{W} U_{n m}^{c} & \max \left(0,1-\left|x_{i}^{s}-m\right|\right) \times \\ & \max \left(0,1-\left|y_{i}^{s}-n\right|\right) , 
 \end{split}
-\label{eq:smapling_v}
+\label{eq_c2:smapling_v}
 \end{equation}
 
 \noindent
@@ -253,7 +253,7 @@ Figure \ref{fig_c2:stn_examples} shows examples of the transformations applied b
     \label{fig_c2:most_least_crops}
 \end{figure*}
 
-To further validate the performance of our STN, we process all images in our testing dataset through the STN module of a trained \gampen{} framework. After that, we sort all the processed images using the value of the parameter $s$ (from Eq. \ref{eq:cropping_transformation}) predicted by the localization network. Higher values of $s$ denote that a more significant fraction of the input image was retained in the output image produced by the STN  (i.e., minimal cropping). In Figure \ref{fig_c2:most_least_crops}, we show the images from our testing dataset with the highest and lowest values of $s$. Figure \ref{fig_c2:most_least_crops} demonstrates that the STN correctly learns to apply the most aggressive crops to smallest galaxies in our dataset, and the least aggressive crops to the largest galaxies.
+To further validate the performance of our STN, we process all images in our testing dataset through the STN module of a trained \gampen{} framework. After that, we sort all the processed images using the value of the parameter $s$ (from Eq. \ref{eq_c2:cropping_transformation}) predicted by the localization network. Higher values of $s$ denote that a more significant fraction of the input image was retained in the output image produced by the STN  (i.e., minimal cropping). In Figure \ref{fig_c2:most_least_crops}, we show the images from our testing dataset with the highest and lowest values of $s$. Figure \ref{fig_c2:most_least_crops} demonstrates that the STN correctly learns to apply the most aggressive crops to smallest galaxies in our dataset, and the least aggressive crops to the largest galaxies.
 
 \begin{figure}[htb]
     \centering
@@ -297,22 +297,22 @@ values. For a network with weights, $\boldsymbol{\omega}$, and a training datase
 
 \begin{equation}
 p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \mathcal{D})=\int p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}) p(\boldsymbol{\omega} \mid \mathcal{D}) d \boldsymbol{\omega} .
-\label{eq:out_y_pred}
+\label{eq_c2:out_y_pred}
 \end{equation}
 
 In order to calculate the above integral, we need to know $p(\boldsymbol{\omega}\mid\mathcal{D})$, i.e., how likely is a particular set of weights given the available training data, $\mathcal{D}$. Since we have trained only the one model, it does not tell us how likely different sets of weights are. Different approximations have been introduced in order to calculate this distribution, with variational inference \citep{Jordan1999IntroductionModels} being the most popular.
 
 Now, the dropout technique was introduced by \cite{Srivastava2014Dropout:Overfitting} in order to prevent neural networks from overfitting; they temporarily removed random neurons from the network according to a Bernoulli distribution, i.e., individual nodes were set to zero with a probability, $p$, known as the dropout rate. This dropout process can also be interpreted as taking the trained model and permuting it into a different one \citep{Srivastava2014Dropout:Overfitting}.
 
-Using variational inference and dropout, we can approximate the integral in Equation \ref{eq:out_y_pred} as 
+Using variational inference and dropout, we can approximate the integral in Equation \ref{eq_c2:out_y_pred} as 
 
 \begin{equation}
 \int p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}) p(\boldsymbol{\omega} \mid \mathcal{D}) d \boldsymbol{\omega} \approx \frac{1}{T} \sum_{t=1}^{T} p(\boldsymbol{\hat{Y}} \mid \boldsymbol{\hat{X}}, \boldsymbol{\omega}_t) ,
-\label{eq:mcd_final}
+\label{eq_c2:mcd_final}
 \end{equation}
 
 \noindent
-wherein we perform $T$ forward passes with dropout enabled and $\boldsymbol{\omega}_t$ is the set of weights during the $t$\textsuperscript{th} forward pass. This procedure is what is referred to as Monte Carlo Dropout. For a detailed derivation of Equation \ref{eq:mcd_final}, please refer to Appendix \ref{sec_c2:ap:mcd_deri}
+wherein we perform $T$ forward passes with dropout enabled and $\boldsymbol{\omega}_t$ is the set of weights during the $t$\textsuperscript{th} forward pass. This procedure is what is referred to as Monte Carlo Dropout. For a detailed derivation of Equation \ref{eq_c2:mcd_final}, please refer to Appendix \ref{sec_c2:ap:mcd_deri}
 
 In order to obtain epistemic uncertainties for \gampen{}, we insert a dropout layer before every weight layer in the network. Each forward pass through \gampen{} samples the approximate parameter posterior. Thus, in order to obtain epistemic uncertainties, we feed every test image $\boldsymbol{\hat{X}}_i$ to the trained \gampen{} framework $T$ times and collect the outputs. In implementing the Monte Carlo Dropout technique, an often-ignored key step is tuning the dropout rate (i.e., the rate at which neurons are set to zero). We discuss the tuning of the dropout rate for \gampen{} in \S \ref{sec_c2:training}.
 
@@ -332,12 +332,12 @@ Although we would like to use \gampen{} to predict aleatoric uncertainties, the 
 - \log \mathcal{L}_{VI} \propto  \sum_{n} & \frac{1}{2}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right]^{\top} \boldsymbol{\hat{\Sigma_n}}^{-1}\left[\boldsymbol{Y}_{n}-\boldsymbol{\hat{\mu}}_{n}\right] \\ 
 & + \frac{1}{2} \log [\operatorname{det}(\boldsymbol{\hat{\Sigma_n}})] + \lambda \sum_{i}\left\|\boldsymbol{\omega_{i}}\right\|^{2} .
 \end{split}
-\label{eq:final_loss_fn}
+\label{eq_c2:final_loss_fn}
 \end{equation}
 
-where $\boldsymbol{\hat{\mu}}_n$ and $\boldsymbol{\hat{\Sigma}}_n$ are the mean and covariance matrix of the multivariate Gaussian distribution predicted by \gampen{} for an image, $\boldsymbol{X}_n$. $\lambda$ is the strength of the regularization term, and $\boldsymbol{\omega}_i$ are sampled from $q(\boldsymbol{\omega})$. For a detailed derivation of Equation \ref{eq:final_loss_fn}, we refer an interested reader to Appendix \ref{sec_c2:ap:final_loss_deri}.
+where $\boldsymbol{\hat{\mu}}_n$ and $\boldsymbol{\hat{\Sigma}}_n$ are the mean and covariance matrix of the multivariate Gaussian distribution predicted by \gampen{} for an image, $\boldsymbol{X}_n$. $\lambda$ is the strength of the regularization term, and $\boldsymbol{\omega}_i$ are sampled from $q(\boldsymbol{\omega})$. For a detailed derivation of Equation \ref{eq_c2:final_loss_fn}, we refer an interested reader to Appendix \ref{sec_c2:ap:final_loss_deri}.
 
-The covariance matrix here represents the uncertainties in the predicted parameters arising from inherent corruptions to the input or the output data. Note that using the full covariance matrix in Equation \ref{eq:final_loss_fn} instead of just the diagonal terms (i.e., assuming the output variables to be independent), helps \gampen{} to incorporate the structured relationship between the different output parameters. We further outline the effects of this in \S \ref{sec_c2:training}.
+The covariance matrix here represents the uncertainties in the predicted parameters arising from inherent corruptions to the input or the output data. Note that using the full covariance matrix in Equation \ref{eq_c2:final_loss_fn} instead of just the diagonal terms (i.e., assuming the output variables to be independent), helps \gampen{} to incorporate the structured relationship between the different output parameters. We further outline the effects of this in \S \ref{sec_c2:training}.
 
 
 \subsection{Practical Implementation Details} \label{subsec_c2:uncertainty_implementation}
@@ -351,7 +351,7 @@ Now, although $\boldsymbol{\Sigma}$ is a $3\times3$ matrix, we are able to chara
 \sigma_{21} & \sigma_{2}^{2} & \sigma_{23} \\
 \sigma_{31} & \sigma_{32} & \sigma_{3}^{2}
 \end{array}\right)
-\label{eq:full_sigma_matrix}
+\label{eq_c2:full_sigma_matrix}
 \end{equation}
 
 \noindent
@@ -363,7 +363,7 @@ as $\boldsymbol{\Sigma} = \boldsymbol{L}\boldsymbol{D}\boldsymbol{L}^{\top}$, wh
 \sigma_{21} & 1 & 0 \\
 \sigma_{31} & \sigma_{32} & 1
 \end{array}\right)
-\label{eq:form_of_L}
+\label{eq_c2:form_of_L}
 \end{equation}
 
 \noindent
@@ -375,15 +375,15 @@ D=\left(\begin{array}{ccc}
 0 & \sigma_{2}^{2} & 0 \\
 0 & 0 & \sigma_{3}^{2}
 \end{array}\right) .
-\label{eq:form_of_D}
+\label{eq_c2:form_of_D}
 \end{equation}
 
 \noindent
-Thus, three of \gampen{}'s output nodes are used to predict the off-diagonal elements in Equation\,\ref{eq:form_of_L},
+Thus, three of \gampen{}'s output nodes are used to predict the off-diagonal elements in Equation\,\ref{eq_c2:form_of_L},
 %$\sigma_{i>j\geq1}^{3}\sigma_{i,j}$ 
 and three more are used to predict $_{i=1}^3s_i$ where $s_i=\log(\sigma_i^2)$. We predict $s_i$ instead of $\sigma_i^2$ in order to achieve better numerical stability during training. 
 
-The loss function, outlined in Equation \ref{eq:final_loss_fn}, contains the determinant and the inverse of $\boldsymbol{\Sigma}$. Calculation of the determinant and the inverse of a matrix are potentially numerically unstable and slow operations. Thus, in order to achieve the maximum speed possible on our GPUs and for numerical stability, we replace these operations using the Cholesky decomposition outlined above and standard linear algebra. 
+The loss function, outlined in Equation \ref{eq_c2:final_loss_fn}, contains the determinant and the inverse of $\boldsymbol{\Sigma}$. Calculation of the determinant and the inverse of a matrix are potentially numerically unstable and slow operations. Thus, in order to achieve the maximum speed possible on our GPUs and for numerical stability, we replace these operations using the Cholesky decomposition outlined above and standard linear algebra. 
 That is, $\boldsymbol{\Sigma}^{-1}$ can be written as $\boldsymbol{\Sigma}^{-1}=\left(\boldsymbol{L}^{-1}\right)^{\top} \boldsymbol{D}^{-1} \boldsymbol{L}^{-1}$, where 
 
 \begin{equation}
@@ -392,7 +392,7 @@ That is, $\boldsymbol{\Sigma}^{-1}$ can be written as $\boldsymbol{\Sigma}^{-1}=
 0 & \frac{1}{\sigma_{2}^{2}} & 0 \\
 0 & 0 & \frac{1}{\sigma_{3}^{2}}
 \end{array}\right)
-\label{eq:D_inv}
+\label{eq_c2:D_inv}
 \end{equation}
 
 \noindent
@@ -400,7 +400,7 @@ because $\boldsymbol{D}$ is a diagonal matrix. Because $\boldsymbol{L}$ is a low
 
 \begin{equation}
 \boldsymbol{L}^{-1}=(\boldsymbol{I}+\boldsymbol{N})^{-1}= \boldsymbol{I} +\sum_{k=1}^{2}(-1)^{k} \boldsymbol{N}^{k} ,
-\label{eq:L_inv}
+\label{eq_c2:L_inv}
 \end{equation}
 
 \noindent
@@ -415,17 +415,17 @@ Finally, we can write the $\log (\operatorname{det}(\boldsymbol{\Sigma}))$ as
 & = \log (\prod_i D_{ii}) \\
 & = \sum \log D_{ii} .
 \end{split}
-\label{eq:log_det_sigma}
+\label{eq_c2:log_det_sigma}
 \end{equation}
 
 \noindent
-By combining Equations \ref{eq:D_inv}, \ref{eq:L_inv}, and \ref{eq:log_det_sigma}, we can calculate the log-likelihood outlined in Equation \ref{eq:final_loss_fn} without having to calculate the inverse or determinant of any matrix, allowing us to fully utilize the capabilities of a GPU and avoiding any numerical instabilities. 
+By combining Equations \ref{eq_c2:D_inv}, \ref{eq_c2:L_inv}, and \ref{eq_c2:log_det_sigma}, we can calculate the log-likelihood outlined in Equation \ref{eq_c2:final_loss_fn} without having to calculate the inverse or determinant of any matrix, allowing us to fully utilize the capabilities of a GPU and avoiding any numerical instabilities. 
 
 \begin{figure*}[htb]
     \centering
     \includegraphics[width
     =\textwidth]{workflow_gampen.png}
-    \caption{Diagram outlining the training (\textit{left}) and inference (\textit{right}) phases of the \gampen\ workflow. Training consists of feeding 105,000 simulated images (with known parameter values) through the STN and CNN modules, minimizing the loss function (Eqn.\,\ref{eq:final_loss_fn}) using Stochastic Gradient Descent. 
+    \caption{Diagram outlining the training (\textit{left}) and inference (\textit{right}) phases of the \gampen\ workflow. Training consists of feeding 105,000 simulated images (with known parameter values) through the STN and CNN modules, minimizing the loss function (Eqn.\,\ref{eq_c2:final_loss_fn}) using Stochastic Gradient Descent. 
     During this process, we re-scale the variables as described in the text, and return them to the original variable space during inference.
     After the STN+CNN are trained, the inference step consists of 1000 forward passes with dropout enabled for each galaxy image. We draw a sample from the predicted multivariate Gaussian distribution during each forward pass, and the collection of these samples gives us the predicted posterior distribution.}
     \label{fig_c2:workflow}
@@ -433,7 +433,7 @@ By combining Equations \ref{eq:D_inv}, \ref{eq:L_inv}, and \ref{eq:log_det_sigma
 
 \subsection{Combining Aleatoric and Epistemic Uncertainties}
 \label{subsec_c2:combining_uncertainties}
-To obtain the posterior distribution of the output variables, we need to combine the aleatoric and epistemic uncertainties. After training a model by maximizing the log-likelihood outlined in Equation \ref{eq:final_loss_fn}, we perform Monte Carlo Dropout. To do this, as outlined in Figure \ref{fig_c2:workflow}, we feed each input image, $\boldsymbol{\hat{X}}_n$, in the test set 1000 times into \gampen{} with dropout enabled. During each iteration, we collect the predicted set of $\left(\hat{\boldsymbol{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$ for the $t^{th}$ forward pass. Then, for each forward pass, we draw a sample $\boldsymbol{\hat{Y}_{n,t}}$ from the multivariate normal distribution $\mathcal{N}\left(\boldsymbol{\hat{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$. 
+To obtain the posterior distribution of the output variables, we need to combine the aleatoric and epistemic uncertainties. After training a model by maximizing the log-likelihood outlined in Equation \ref{eq_c2:final_loss_fn}, we perform Monte Carlo Dropout. To do this, as outlined in Figure \ref{fig_c2:workflow}, we feed each input image, $\boldsymbol{\hat{X}}_n$, in the test set 1000 times into \gampen{} with dropout enabled. During each iteration, we collect the predicted set of $\left(\hat{\boldsymbol{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$ for the $t^{th}$ forward pass. Then, for each forward pass, we draw a sample $\boldsymbol{\hat{Y}_{n,t}}$ from the multivariate normal distribution $\mathcal{N}\left(\boldsymbol{\hat{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$. 
 
 The distribution generated by the collection of all 1000 forward passes, $\boldsymbol{\hat{Y}_{n}}$,
 %$_{t=1}^{1000}\boldsymbol{\hat{Y}_{n,t}}$ 
@@ -458,16 +458,16 @@ Therefore, we first apply the logit transformation to $L_B/L_T$ and log transfor
 
 \begin{equation}
 \boldsymbol{Y_n'} = f''(\boldsymbol{Y}_n'') = \left( \log \frac{L_B/L_T}{1 - L_B/L_T}, \log R_e, \log F \right) ,
-\label{eq:transformation_f''}
+\label{eq_c2:transformation_f''}
 \end{equation} 
 
 \noindent
-where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the set of ground-truth parameters corresponding to the simulated image, $\boldsymbol{X}_n$, and $f''$ is how we will refer to the transformation in Equation\,\ref{eq:transformation_f''}. Note that the uniformity of these transformations allows us to write the likelihood in terms of a multivariate Gaussian distribution. Next we apply the standard scaler to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity:
+where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the set of ground-truth parameters corresponding to the simulated image, $\boldsymbol{X}_n$, and $f''$ is how we will refer to the transformation in Equation\,\ref{eq_c2:transformation_f''}. Note that the uniformity of these transformations allows us to write the likelihood in terms of a multivariate Gaussian distribution. Next we apply the standard scaler to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity:
 %This transformation, which we denote by $f'$, can be written as
 
 \begin{equation}
 \boldsymbol{Y}_n = f'(\boldsymbol{Y}_n')\,\,\,\,\,\mathrm{where}\,\,\,\,\,{Y}_{n,i} = \frac{Y'_{n,i} - \overline{Y'_{i}}}{\sqrt{\operatorname{var}(Y'_{i})} ,} 
-\label{eq:transformation_f'}
+\label{eq_c2:transformation_f'}
 \end{equation}
 
 \noindent
@@ -475,9 +475,9 @@ where the $i$ subscript refers to each of the three parameters. Combining the ab
 
 Note that effectively \gampen{} is trained in the $\boldsymbol{Y}_n$ variable space, and the predictions made by \gampen{} are also in this space. Thus, post training, during inference, we need to apply the inverse of the standard scaler function, $f'^{-1}$ (with no re-tuning of the mean or variance), followed by the inverse of the logit and log transformations, $f''^{-1}$, as indicated in Figure\,\ref{fig_c2:workflow}. These final transformations also ensure that the predicted values are all within the physical ranges mentioned earlier.
 
-We train \gampen{} by minimizing the loss function in Equation\,\ref{eq:final_loss_fn} using Stochastic Gradient Descent, wherein we estimate the gradient of the loss function using a mini-batch of training samples and update the network weights and biases accordingly. Calculation of the gradient is done using the back-propagation algorithm, and we refer an interested reader to \citet{rumelhart_88} for details.
+We train \gampen{} by minimizing the loss function in Equation\,\ref{eq_c2:final_loss_fn} using Stochastic Gradient Descent, wherein we estimate the gradient of the loss function using a mini-batch of training samples and update the network weights and biases accordingly. Calculation of the gradient is done using the back-propagation algorithm, and we refer an interested reader to \citet{rumelhart_88} for details.
 
-The training process involves hyper-parameters that must be chosen: the learning rate (the step-size during gradient descent), momentum (acceleration factor used for faster convergence), strength of L2 regularization ($\lambda$ in the loss function in Eqn.\,\ref{eq:final_loss_fn}), and batch size (the number of images processed before weights and biases are updated).
+The training process involves hyper-parameters that must be chosen: the learning rate (the step-size during gradient descent), momentum (acceleration factor used for faster convergence), strength of L2 regularization ($\lambda$ in the loss function in Eqn.\,\ref{eq_c2:final_loss_fn}), and batch size (the number of images processed before weights and biases are updated).
 To choose these hyper-parameters, we trained \gampen{} with a given set of hyper-parameters for forty epochs, then verified convergence by checking whether the value of the loss function and the mean-absolute-error on the validation set had stabilized over at least the last ten epochs. An epoch of training refers to running all of the images in the training set through the network once. We chose final hyper-parameters that resulted in the lowest value for the loss function. This resulted in the following values: Learning Rate, $5\times10^{-7}$; Momentum, 0.99; Strength of L2 regularization $\lambda=10^{-4}$, and Batch Size, 16. The grid of values we used for the hyper-parameter search is as follows:- Learning Rate - $10^{-5}$, $5 \times 10^{-5}$, $10^{-6}$, $5 \times 10^{-6}$, \ldots,  $5 \times 10^{-8}$; Momentum - 0.8, 0.9, 0.95, 0.99; $\lambda$ - $10^{-5}$,$10^{-4}$, \ldots, $10^{-2}$; Batch Size: 8, 16, 32, 64.
 
 One of the most critical adjustable parameters is the dropout rate, as it directly affects the calculation of the epistemic uncertainties (as described in \S \ref{subsec_c2:mcd}). On average, higher dropout rates lead networks to estimate higher epistemic uncertainties. To determine the optimal value for the dropout rate, we trained variants of \gampen{} with dropout rates from 0 to 0.2, all with the same optimized values of momentum, learning rate, and batch size given above. After that, we performed inference using each model as outlined in Figure \ref{fig_c2:workflow}. 

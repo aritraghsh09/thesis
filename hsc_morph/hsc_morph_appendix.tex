@@ -95,18 +95,18 @@ FROM
 \end{lstlisting}
 
 
-\section{Additional Details About \gampen{}}\label{ap:gampen}
+%\section{Additional Details About \gampen{}}\label{ap:gampen}
 
-To provide readers a visual understanding of how \gampen{}'s different architectural components are organized, Figure \ref{fig_c3:gampen_schematic} shows a schematic diagram outlining the structure of both the STN and CNN in \gampen{}. For complete details on individual layers in \gampen{}, please refer to \citet{gampen_software_paper}.
+%To provide readers a visual understanding of how \gampen{}'s different architectural components are organized, Figure \ref{fig_c3:gampen_schematic} shows a schematic diagram outlining the structure of both the STN and CNN in \gampen{}. For complete details on individual layers in \gampen{}, please refer to \citet{gampen_software_paper}.
 
-\begin{figure*}[htb]
-    \centering
-    \includegraphics[width
-    =\textwidth]{gampen_schematic.png}
-    \caption{A schematic diagram of the Galaxy Morphology Posterior Estimation Network. \gampen's architecture consists of a downstream CNN module preceded by an upstream STN module. The CNN module empowers \gampen{} to estimate posterior distributions of galaxy morphology parameters. The upstream STN module trains without any extra supervision and learns to apply appropriate cropping transformations to the input image before passing it on to the CNN (for more details about these modules, see \S \ref{sec_c3:gampen}).
-    The numbers below each layer refer to the number of filters/neurons in each layer. The yellow boxes inside the convolutional layers show the kernel and the number beside it refers to the corresponding kernel size. Only one kernel is shown per set of convolutional layers; all other layers in the set have kernels of the same size. Conv2D and ReLU refer to Convolutional Layers and Rectified Linear Units, respectively.}
-    \label{fig_c3:gampen_schematic}
-\end{figure*}
+%\begin{figure*}[htb]
+%    \centering
+%    \includegraphics[width
+%    =\textwidth]{gampen_schematic.png}
+%    \caption{A schematic diagram of the Galaxy Morphology Posterior Estimation Network. \gampen's architecture consists of a downstream CNN module preceded by an upstream STN module. The CNN module empowers \gampen{} to estimate posterior distributions of galaxy morphology parameters. The upstream STN module trains without any extra supervision and learns to apply appropriate cropping transformations to the input image before passing it on to the CNN (for more details about these modules, see \S \ref{sec_c3:gampen}).
+%   The numbers below each layer refer to the number of filters/neurons in each layer. The yellow boxes inside the convolutional layers show the kernel and the number beside it refers to the corresponding kernel size. Only one kernel is shown per set of convolutional layers; all other layers in the set have kernels of the same size. Conv2D and ReLU refer to Convolutional Layers and Rectified Linear Units, respectively.}
+%    \label{fig_c3:gampen_schematic}
+%\end{figure*}
 
 \section{Additional Details About Trained \gampen{} Models}\label{ap:sec_c3:trained_models}
 

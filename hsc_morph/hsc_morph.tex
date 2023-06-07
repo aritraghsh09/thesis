@@ -231,11 +231,11 @@ Since reducing the dynamic range of pixel values has been found to be helpful in
 
 \begin{equation}
 \boldsymbol{Y_n'} = f''(\boldsymbol{Y}_n'') = \left( \log \frac{L_B/L_T}{1 - L_B/L_T}, \log R_e, \log F \right) ,
-\label{eq:transformation_f''}
+\label{eq_c3:transformation_f''}
 \end{equation} 
 
 \noindent
-where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the target set of variables before transformation and $f''$ is how we will refer to the transformation in Equation\,\ref{eq:transformation_f''}. Next, we apply the standard scalar transformation to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity. These two transformations ensure that all three variables have similar numerical ranges and prevent variables with larger numerical values from making a disproportionate contribution to the loss function.
+where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the target set of variables before transformation and $f''$ is how we will refer to the transformation in Equation\,\ref{eq_c3:transformation_f''}. Next, we apply the standard scalar transformation to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity. These two transformations ensure that all three variables have similar numerical ranges and prevent variables with larger numerical values from making a disproportionate contribution to the loss function.
 
 Post training, during inference, we apply the inverse of the standard scalar function (with no re-tuning of the mean or variance), followed by the inverse of the logit and log transformations, $f''^{-1}$, as indicated in Figure\,\ref{fig_c3:posterior_pred_workflow}. Besides transforming the variables back to their original space, these final transformations also ensure that the predicted values always conform to physically meaningful ranges ($0 \leq L_B/L_T \leq 1$; $R_e > 0$; $F > 0$).
 
