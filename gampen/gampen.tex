@@ -1,4 +1,4 @@
-\chapter{GaMPEN: A Machine Learning Framework for Estimating Bayesian Posteriors of Galaxy Morphological Parameters}
+\chapter{GaMPEN: A Machine Learning Framework for Estimating Bayesian Posteriors of Galaxy Morphological Parameters \label{ch:gampen}}
 
 Originally published by the American Astronomical Society in \textit{The Astrophysical Journal}, Volume 935, Issue 2, pp. 138, DOI:\href{https://iopscience.iop.org/article/10.3847/1538-4357/ac7f9e}{10.3847/1538-4357/ac7f9e}\\
 {\large \emph{Aritra Ghosh, C. Megan Urry, Amrit Rau, Laurence Perreault-Levasseur, Miles Cranmer, Kevin Schawinski, Dominic Stark, Chuan Tian, Ryan Ofman, Tonima Tasnim Ananna, Connor Auge, Nico Cappelluti, David B. Sanders, and Ezequiel Treister} }\\
@@ -761,7 +761,7 @@ Thus, replacing \gampen's quantitative predictions in certain small regions of t
 %    \item Or confess that you did this for a previous classification version, but %are now releasing this. 
 %\end{itemize}
 
-\section{Discussion \& Conclusions} \label{sec:conclusions}
+\section{Discussion \& Conclusions} \label{sec_c2:conclusions}
 In this work, we introduced the Galaxy Morphology Posterior Estimation Network (\gampen{}), a machine learning framework that can estimate posterior distributions for a galaxy's bulge-to-total light ratio, effective radius, and flux. Although \gampen{} was trained to estimate these specific parameters, it can be adapted by users easily to predict other/additional morphological parameters (e.g., axis ratio, position angle, etc.). One important consideration while choosing how many parameters to predict using a single \gampen{} framework is that the number of terms in the covariance matrix will increase as $\mathcal{O}(n^2)$, where n is the number of output variables. Although the computation time will increase at a much less steep rate, the exact nature of the increase will depend on the specifics of the hardware being used.
 
 

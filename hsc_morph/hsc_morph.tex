@@ -20,7 +20,7 @@ A quantitative description of galaxy morphology is typically expressed in terms 
 
 Over the last decade, machine learning (ML) has been increasingly used for a wide variety of tasks---from identifying exoplanets to studying black holes \citep[e.g.,][]{ml_pz,ml_sz,Shallue2018IdentifyingKepler-90,Sharma2020ApplicationClassification,Natarajan2021QuasarNet:Holes}. Unsurprisingly, these algorithms have become increasingly popular for determining galaxy morphology as well. \citep[e.g.,][]{Dieleman2015Rotation-invariantPrediction, Huertas-Company2015ALEARNING, Tuccillo2018DeepFitting, gamornet_paper, Hausen2020MorpheusData, Walmsley2020GalaxyLearning, Cheng2021GalaxyNetworks, Vega-Ferrero2021PushingSurvey, Tarsitano2022ImageLearning}. The use of these techniques has been driven by the fact that  traditional methods of analyzing morphologies---visual classification and template fitting---are not scalable to the data volume expected from future surveys such as the Vera Rubin Observatory Legacy Survey of Space and Time \citep[LSST;][]{lsst}, the Nancy Grace Roman Space Telescope \citep[NGRST;][]{ngrst}, and Euclid \citep{euclid}. 
 
-Most previous applications of ML to galaxy morphology produced broad, qualitative classifications rather than numerical estimates of morphological parameters. \citet{Tuccillo2018DeepFitting} did estimate parameters of single-component \sersic{} fits. However, they did not analyze galaxy sub-structures or provide uncertainties. In order to address these challenges, in \citet{gampen_software_paper}, we introduced The Galaxy Morphology Posterior Estimation Network (\gampen{}). \gampen{} is a machine learning framework that estimates full Bayesian posteriors for a galaxy's bulge-to-total light ratio ($L_B/L_T$), effective radius ($R_e$), and flux ($F$). \gampen{} takes into account covariances between the different parameters in its predictions and has been shown to produce calibrated, accurate posteriors. 
+Most previous applications of ML to galaxy morphology produced broad, qualitative classifications rather than numerical estimates of morphological parameters. \citet{Tuccillo2018DeepFitting} did estimate parameters of single-component \sersic{} fits. However, they did not analyze galaxy sub-structures or provide uncertainties. In order to address these challenges, in Chapter \ref{ch:gampen}, we introduced The Galaxy Morphology Posterior Estimation Network (\gampen{}). \gampen{} is a machine learning framework that estimates full Bayesian posteriors for a galaxy's bulge-to-total light ratio ($L_B/L_T$), effective radius ($R_e$), and flux ($F$). \gampen{} takes into account covariances between the different parameters in its predictions and has been shown to produce calibrated, accurate posteriors. 
 
 \gampen{} can also automatically crop input galaxy cutouts to an optimal size before determining their morphology. This feature is critical given that morphology-determination ML frameworks typically require input cutouts of a fixed size, and thus, cutouts of a ``typical" size often contain secondary objects in the frame. By cropping out most secondary objects in the frame, \gampen{} can make more accurate predictions over wide ranges of redshift and magnitude. 
 
@@ -36,7 +36,7 @@ In this paper, we use \gampen{} to estimate Bayesian posteriors for $L_B/L_T$, $
 
 This paper also demonstrates that ML techniques can be used to study morphology in new surveys, which do not have already-classified large training sets available. Most previous works involving ML to study galaxy morphology have depended on the availability of an extensive training set of real galaxies with known properties from the same survey or a similar one. However, if Convolutional Neural Networks (CNNs) are to replace traditional methods for morphological analysis, we must be able to use them on new surveys that do not have a morphological catalog readily available to be used as a training set. In this paper, we demonstrate that by first training on simulations of galaxies and then using real data for transfer learning (fine-tuning the simulation-trained network), we can fully train \gampen{}, while having to label $<1\%$ of our dataset. This work outlines an easy pathway to apply morphological ML techniques to upcoming large imaging surveys.  
 
-In \S \ref{sec_c3:data}, we describe the HSC data used in this study, along with the simulated two-dimensional light profiles. \S \ref{sec_c3:gampen} and \S \ref{sec_c3:method} provide a brief introduction to \gampen{} and how we train it. In \S \ref{sec_c3:galfitting}, we outline how we determined the morphological parameters of $\sim60,000$ HSC-Wide galaxies for transfer learning and validating the results of our ML framework. \S \ref{sec_c3:results} provides detailed information on the accuracy of \gampen{}'s predictions. \S \ref{sec_c3:compare} compares our predictions to that of other catalogs. We end with a summary and discussion of our results in \S \ref{sec_c3:conclusions}.
+In \S \ref{sec_c3:data}, we describe the HSC data used in this study, along with the simulated two-dimensional light profiles. \S \ref{sec_c3:method} provides a description of how we train \gampen{}. In \S \ref{sec_c3:galfitting}, we outline how we determined the morphological parameters of $\sim60,000$ HSC-Wide galaxies for transfer learning and validating the results of our ML framework. \S \ref{sec_c3:results} provides detailed information on the accuracy of \gampen{}'s predictions. \S \ref{sec_c3:compare} compares our predictions to that of other catalogs. We end with a summary and discussion of our results in \S \ref{sec_c3:conclusions}.
 
 The full Bayesian posteriors for all $\sim 8$ million galaxies are being released with the publication of this work. We are also releasing the source code of \gampen{}, along with the trained models and extensive documentation and tutorials on how to use \gampen{}. The public data release is described in Appendix \ref{sec_c3:ap:data_access}.
 
@@ -89,7 +89,7 @@ quadratic polynomial photometric redshift fitting code, and Mizuki \citep{mizuki
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{real_data_examples.png}
+    \includegraphics[width = 0.95\textwidth]{real_data_examples.png}
     \caption{Four randomly chosen galaxy cutouts are shown here for each redshift bin, with the object of interest at the center of each cutout. Note that most of these cutouts have secondary objects in the frame, which can often cause ML algorithms to produce spurious classifications. \gampen{} uses a Spatial Transformer Network to crop most secondary objects out of the frame %, as outlined later.
     (see \S 3).}
     \label{fig_c3:real_data_eg}
@@ -102,7 +102,7 @@ The above process resulted in the selection of $\sim 8$ million galaxies, with $
 
 \subsection{Simulated Galaxies for Initial Training} \label{sec_c3:sim_data}
 
-As outlined later in \S \ref{sec_c3:sim_training}, we perform \gampen{}'s initial round of training on mock galaxy image cutouts, simulated to match HSC observations in the appropriate band. To generate mock images, we used GalSim \citep{Rowe2015GalSim:Toolkit}, the modular galaxy image simulation toolkit. GalSim has been extensively tested and shown to yield very accurate rendered images of galaxies. We simulated 150,000 galaxies in each redshift bin, with a mixture of both single and double-component galaxies, in order to have a diverse training sample. To be exact, $75\%$ of the simulated galaxies consisted of both bulge and disk components, while the remaining $25\%$ had either a single disk or a bulge.
+As outlined later in \S \ref{sec_c3:sim_training}, we perform \gampen{}'s initial round of training on mock galaxy image cutouts, simulated to match HSC observations in the appropriate band. To generate mock images, we used the procedure outlined previously in \S \ref{sec_c2:sim_data}. We used GalSim to simulate 150,000 galaxies in each redshift bin, with a mixture of both single and double-component galaxies, in order to have a diverse training sample. To be exact, $75\%$ of the simulated galaxies consisted of both bulge and disk components, while the remaining $25\%$ had either a single disk or a bulge.
 
 \begin{table}[htbp]
     \centering
@@ -168,36 +168,36 @@ The parameter ranges for fluxes, and half-light radii are quite expansive and ar
     \label{fig_c3:sim_process}
 \end{figure}
 
-To make the two-dimensional light profiles generated by GalSim realistic, we convolved these with representative point-spread functions (PSFs) downloaded from the HSC survey. We also added realistic noise using one-thousand $2\arcsec\times2\arcsec$ ``sky objects" from the HSC PDR2 Wide field. Sky objects are empty regions identified by the HSC pipeline that are outside object footprints and are recommended for being used in blank-sky measurements. For PSF convolution and noise addition, we follow the procedure detailed in \citet{gampen_software_paper} and refer the interested reader to that work for more details. Figure \ref{fig_c3:sim_process} shows a randomly chosen simulated light profile and the corresponding image cutout generated after PSF convolution and noise addition. All the simulated galaxy images in each redshift bin were chosen to have cutout sizes equal to their real data counterparts, as outlined in \S \ref{sec_c3:hsc_data}. 
+To make the two-dimensional light profiles generated by GalSim realistic, we convolved these with representative point-spread functions (PSFs) downloaded from the HSC survey. We also added realistic noise using one-thousand $2\arcsec\times2\arcsec$ ``sky objects" from the HSC PDR2 Wide field. Sky objects are empty regions identified by the HSC pipeline that are outside object footprints and are recommended for being used in blank-sky measurements. For PSF convolution and noise addition, we follow the procedure outlined previously in Chapter \ref{ch:gampen} and refer the interested reader to \S \ref{sec_c2:sim_data} for more details. Figure \ref{fig_c3:sim_process} shows a randomly chosen simulated light profile and the corresponding image cutout generated after PSF convolution and noise addition. All the simulated galaxy images in each redshift bin were chosen to have cutout sizes equal to their real data counterparts, as outlined in \S \ref{sec_c3:hsc_data}. 
 
 We would like to note that even after PSF convolution and noise addition, our simulated galaxies are only semi-realistic and do not account for many specific features seen in real data (e.g., spiral arms, knots, non-classical bulges, etc.). The primary goal of the simulation dataset is to provide a large corpus of images on which the initial training can be done. The second step of fine-tuning \gampen{} on real data (described in \S \ref{sec_c3:transfer_learning}) ensures that the framework also learns about the existence of features in the real data that are missed by the simulations.
 
-\section{Brief Introduction to \gampen{}} \label{sec_c3:gampen}
-The Galaxy Morphology Posterior Estimation Network \citep[\gampen{};][]{gampen_software_paper} is a novel machine learning framework that can predict posterior distributions for a galaxy's bulge-to-total light ratio ($L_B/L_T$), effective radius ($R_e$), and flux ($F$). In this section, we provide a brief introduction to \gampen{}; however, for a complete understanding of \gampen{}'s architecture and how it predicts posteriors, we refer the reader to Appendix \ref{ap:gampen} and \citet{gampen_software_paper}.
+%\section{Brief Introduction to \gampen{}} \label{sec_c3:gampen}
+%The Galaxy Morphology Posterior Estimation Network \citep[\gampen{};][]{gampen_software_paper} is a novel machine learning framework that can predict posterior distributions for a galaxy's bulge-to-total light ratio ($L_B/L_T$), effective radius ($R_e$), and flux ($F$). In this section, we provide a brief introduction to \gampen{}; however, for a complete understanding of \gampen{}'s architecture and how it predicts posteriors, we refer the reader to Appendix \ref{ap:gampen} and \citet{gampen_software_paper}.
 
-The architecture of \gampen{} consists of an upstream Spatial Transformer Network (STN) module followed by a downstream Convolutional Neural Network (CNN) module. The upstream STN is used to automatically crop each input image frame to an optimal size before morphology determination. Based on the input image, the STN predicts the parameters of an affine transformation which is then applied to the input image. The transformed image is then passed onto the downstream CNN, which estimates the joint posterior distributions of the morphological parameters. Because the transformation we use is differentiable, the STN can be trained using standard backpropagation along with the downstream CNN without any additional supervision.
+%The architecture of \gampen{} consists of an upstream Spatial Transformer Network (STN) module followed by a downstream Convolutional Neural Network (CNN) module. The upstream STN is used to automatically crop each input image frame to an optimal size before morphology determination. Based on the input image, the STN predicts the parameters of an affine transformation which is then applied to the input image. The transformed image is then passed onto the downstream CNN, which estimates the joint posterior distributions of the morphological parameters. Because the transformation we use is differentiable, the STN can be trained using standard backpropagation along with the downstream CNN without any additional supervision.
 
-The inclusion of the STN in the framework greatly reduces the amount of time spent on data pre-processing as we do not have to worry about making cutouts of the ``proper size"---an inherently difficult task since most of the galaxies in our sample have not been morphologically analyzed before. More importantly, the STN greatly reduces the chance of spurious results by cropping most secondary objects out of frame (see \S \ref{sec_c3:stn_performance}).
+%The inclusion of the STN in the framework greatly reduces the amount of time spent on data pre-processing as we do not have to worry about making cutouts of the ``proper size"---an inherently difficult task since most of the galaxies in our sample have not been morphologically analyzed before. More importantly, the STN greatly reduces the chance of spurious results by cropping most secondary objects out of frame (see \S \ref{sec_c3:stn_performance}).
 
-\begin{figure*}[htb]
-    \centering
-    \includegraphics[width
-    =\textwidth]{posterior_pred_workflow.png}
-    \caption{Diagram outlining the training (\textit{left}) and posterior inference (\textit{right}) phases of the \gampen{} workflow. Training consists of feeding galaxies (with pre-determined parameter values) through the STN and CNN modules, minimizing the loss function using Stochastic Gradient Descent. 
-    During this process, we re-scale the variables described in the text, and return them to the original variable space during inference.
-    After the STN+CNN networks are trained, the posterior inference step consists of 500 forward passes with dropout enabled for each galaxy image. We draw a sample from the predicted multivariate Gaussian distribution during each forward pass, and the collection of these samples gives us the predicted posterior distribution.}
-    \label{fig_c3:posterior_pred_workflow}
-\end{figure*}
+%\begin{figure*}[htb]
+%    \centering
+%    \includegraphics[width
+%    =\textwidth]{posterior_pred_workflow.png}
+%    \caption{Diagram outlining the training (\textit{left}) and posterior inference (\textit{right}) phases of the \gampen{} workflow. Training consists of feeding galaxies (with pre-determined parameter values) through the STN and CNN modules, minimizing the loss function using Stochastic Gradient Descent. 
+%    During this process, we re-scale the variables described in the text, and return them to the original variable space during inference.
+%    After the STN+CNN networks are trained, the posterior inference step consists of 500 forward passes with dropout enabled for each galaxy image. We draw a sample from the predicted multivariate Gaussian distribution during each forward pass, and the collection of these samples gives us the predicted posterior distribution.}
+%    \label{fig_c3:posterior_pred_workflow}
+%\end{figure*}
 
-Two primary sources of error contribute to the uncertainties in the parameters predicted by \gampen{}. The first arises from errors inherent to the input imaging data (e.g., noise and PSF blurring), and this is commonly referred to as aleatoric uncertainty. The second source of error comes from the limitations of the model being used for prediction (e.g., the number of free parameters in \gampen{}, the amount of training data, etc.); this is referred to as epistemic uncertainty. 
+%Two primary sources of error contribute to the uncertainties in the parameters predicted by \gampen{}. The first arises from errors inherent to the input imaging data (e.g., noise and PSF blurring), and this is commonly referred to as aleatoric uncertainty. The second source of error comes from the limitations of the model being used for prediction (e.g., the number of free parameters in \gampen{}, the amount of training data, etc.); this is referred to as epistemic uncertainty. 
 
-For every given input image, \gampen{} predicts a multivariate Gaussian distribution $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$, with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. Although we would like to use \gampen{} to predict aleatoric uncertainties, the covariance matrix, $\boldsymbol{\Sigma}$, is not known {\it a priori}. Instead, we train \gampen{} to learn these values by minimizing the negative log-likelihood of the output parameters for the training set. The covariance matrix here represents the aleatoric uncertainties in \gampen{}'s predictions.
+%For every given input image, \gampen{} predicts a multivariate Gaussian distribution $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$, with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. Although we would like to use \gampen{} to predict aleatoric uncertainties, the covariance matrix, $\boldsymbol{\Sigma}$, is not known {\it a priori}. Instead, we train \gampen{} to learn these values by minimizing the negative log-likelihood of the output parameters for the training set. The covariance matrix here represents the aleatoric uncertainties in \gampen{}'s predictions.
 
-In order to obtain epistemic uncertainties, we use the Monte-Carlo Dropout technique \citep{Srivastava2014Dropout:Overfitting}, wherein during inference, each image is passed through the trained networks multiple times. During each forward pass, random neurons from the network are removed according to a Bernoulli distribution, i.e., individual nodes are set to zero with a probability, $p$, known as the dropout rate.
+%In order to obtain epistemic uncertainties, we use the Monte-Carlo Dropout technique \citep{Srivastava2014Dropout:Overfitting}, wherein during inference, each image is passed through the trained networks multiple times. During each forward pass, random neurons from the network are removed according to a Bernoulli distribution, i.e., individual nodes are set to zero with a probability, $p$, known as the dropout rate.
 
-The entire procedure used to estimate posteriors is summarized in Figure \ref{fig_c3:posterior_pred_workflow}. Once \gampen{} has been trained, we feed each input image, $\boldsymbol{\hat{X}}_n$, 500 times into the trained model with dropout enabled. During each iteration, we collect the predicted set of $\left(\hat{\boldsymbol{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$ for the $t^{th}$ forward pass. Then, for each forward pass, we draw a sample $\boldsymbol{\hat{Y}_{n,t}}$ from the multivariate normal distribution $\mathcal{N}\left(\boldsymbol{\hat{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$. The distribution generated by the collection of all 500 forward passes, $\boldsymbol{\hat{Y}_{n}}$,
+%The entire procedure used to estimate posteriors is summarized in Figure \ref{fig_c3:posterior_pred_workflow}. Once \gampen{} has been trained, we feed each input image, $\boldsymbol{\hat{X}}_n$, 500 times into the trained model with dropout enabled. During each iteration, we collect the predicted set of $\left(\hat{\boldsymbol{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$ for the $t^{th}$ forward pass. Then, for each forward pass, we draw a sample $\boldsymbol{\hat{Y}_{n,t}}$ from the multivariate normal distribution $\mathcal{N}\left(\boldsymbol{\hat{\mu}}_{n,t},\boldsymbol{\hat{\Sigma}}_{n,t}\right)$. The distribution generated by the collection of all 500 forward passes, $\boldsymbol{\hat{Y}_{n}}$,
 %$_{t=1}^{500}\boldsymbol{\hat{Y}_{n,t}}$ 
-represents the predicted posterior distribution for the test image $\boldsymbol{\hat{X}}_n$. The different forward passes capture the epistemic uncertainties, and each prediction in this sample also has its associated aleatoric uncertainty represented by $\boldsymbol{\hat{\Sigma}_{n,t}}$. Thus the above procedure allows us to incorporate both aleatoric and epistemic uncertainties in \gampen{}'s predictions.
+%represents the predicted posterior distribution for the test image $\boldsymbol{\hat{X}}_n$. The different forward passes capture the epistemic uncertainties, and each prediction in this sample also has its associated aleatoric uncertainty represented by $\boldsymbol{\hat{\Sigma}_{n,t}}$. Thus the above procedure allows us to incorporate both aleatoric and epistemic uncertainties in \gampen{}'s predictions.
 
 
 \section{Training \gampen{}} \label{sec_c3:method}
@@ -223,44 +223,44 @@ The process of training \gampen{} consists of the following steps, summarized in
 
 We describe each of the above steps in detail below. 
 
-\subsection{Data Transformations} \label{sec_c3:transformations}
+%\subsection{Data Transformations} \label{sec_c3:transformations}
 
-To make the training process more robust against numerical instabilities, we transform the input images and target variables following the steps outlined in \citet{gampen_software_paper}.
+%To make the training process more robust against numerical instabilities, we transform the input images and target variables following the steps outlined in Chapter \ref{ch:gampen}.
 
-Since reducing the dynamic range of pixel values has been found to be helpful in neural network convergence \citep[e.g.,][]{zanisi_21,walmsley_decals,tanaka_22}, we pass all images in our dataset through the arsinh function. For all the target variables, we first apply the logit transformation to $L_B/L_T$ and log transformations to $R_e$ and $F$: 
+%Since reducing the dynamic range of pixel values has been found to be helpful in neural network convergence \citep[e.g.,][]{zanisi_21,walmsley_decals,tanaka_22}, we pass all images in our dataset through the arsinh function. For all the target variables, we first apply the logit transformation to $L_B/L_T$ and log transformations to $R_e$ and $F$: 
 
-\begin{equation}
-\boldsymbol{Y_n'} = f''(\boldsymbol{Y}_n'') = \left( \log \frac{L_B/L_T}{1 - L_B/L_T}, \log R_e, \log F \right) ,
-\label{eq_c3:transformation_f''}
-\end{equation} 
+%\begin{equation}
+%\boldsymbol{Y_n'} = f''(\boldsymbol{Y}_n'') = \left( \log \frac{L_B/L_T}{1 - L_B/L_T}, \log R_e, \log F \right) ,
+%\label{eq_c3:transformation_f''}
+%\end{equation} 
 
-\noindent
-where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the target set of variables before transformation and $f''$ is how we will refer to the transformation in Equation\,\ref{eq_c3:transformation_f''}. Next, we apply the standard scalar transformation to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity. These two transformations ensure that all three variables have similar numerical ranges and prevent variables with larger numerical values from making a disproportionate contribution to the loss function.
+%\noindent
+%where $\boldsymbol{Y}_n'' = [{L_B/L_T,R_e,F}]$ is the target set of variables before transformation and $f''$ is how we will refer to the transformation in Equation\,\ref{eq_c3:transformation_f''}. Next, we apply the standard scalar transformation to each parameter (calibrated on the training data), which amounts to subtracting the mean value of each parameter and scaling its variance to unity. These two transformations ensure that all three variables have similar numerical ranges and prevent variables with larger numerical values from making a disproportionate contribution to the loss function.
 
-Post training, during inference, we apply the inverse of the standard scalar function (with no re-tuning of the mean or variance), followed by the inverse of the logit and log transformations, $f''^{-1}$, as indicated in Figure\,\ref{fig_c3:posterior_pred_workflow}. Besides transforming the variables back to their original space, these final transformations also ensure that the predicted values always conform to physically meaningful ranges ($0 \leq L_B/L_T \leq 1$; $R_e > 0$; $F > 0$).
+%Post training, during inference, we apply the inverse of the standard scalar function (with no re-tuning of the mean or variance), followed by the inverse of the logit and log transformations, $f''^{-1}$, as indicated in Figure\,\ref{fig_c2:workflow}. Besides transforming the variables back to their original space, these final transformations also ensure that the predicted values always conform to physically meaningful ranges ($0 \leq L_B/L_T \leq 1$; $R_e > 0$; $F > 0$).
 
 
 \subsection{Initial Training of \gampen{} on simulated galaxies} \label{sec_c3:sim_training}
 The purpose of training \gampen{} initially on simulations is two-fold. Firstly, it greatly reduces the amount of real data needed for training the framework. Secondly, since simulated galaxies are the only situation where we have access to the ``ground-truth" morphological parameters, they provide the perfect dataset to assess \gampen{}'s typical accuracy for the different output parameters. 
 
-In \citet{gampen_software_paper}, we extensively tested and reported on \gampen{}'s performance on simulated HSC $z \leq 0.25$ \gb{}-band galaxies. Here, we extend that to include simulated \rb{}-band $0.25 < z \leq 0.5$ and \ib{}-band $0.50 < z \leq 0.75$  galaxies. Out of the 150,000 galaxies simulated in each z-bin, we use $\mathbf{70\%}$ to train the framework and $15\%$ as a validation set to determine the optimum value for various hyper-parameters (such as learning rate, batch size, etc.). Thereafter, we use the remaining $15\%$, which the framework has never encountered before, to evaluate the performance of the trained framework. 
+In Chapter \ref{ch:gampen}, we extensively tested and reported on \gampen{}'s performance on simulated HSC $z \leq 0.25$ \gb{}-band galaxies. Here, we extend that to include simulated \rb{}-band $0.25 < z \leq 0.5$ and \ib{}-band $0.50 < z \leq 0.75$  galaxies. Out of the 150,000 galaxies simulated in each z-bin, we use $\mathbf{70\%}$ to train the framework and $15\%$ as a validation set to determine the optimum value for various hyper-parameters (such as learning rate, batch size, etc.). Thereafter, we use the remaining $15\%$, which the framework has never encountered before, to evaluate the performance of the trained framework. 
 
 We train \gampen{} by minimizing its loss function using Stochastic Gradient Descent. The different hyper-parameters that need to be tuned are: the learning rate (the step size during gradient descent), momentum (acceleration factor used for faster convergence), the strength of L2 regularization (the degree to which larger weight values are penalized), and batch size (the number of images processed before weights and biases is updated). To choose these hyper-parameters, we trained \gampen{} with different sets of hyper-parameters and chose the ones that resulted in the lowest value for the loss function on the validation set. The final %set of 
 hyper-parameters for the trained models are given in Appendix \ref{ap:sec_c3:trained_models}.
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{err_hist_sim_all_z.png}
+    \includegraphics[width = 0.95\textwidth]{err_hist_sim_all_z.png}
     \caption{Histograms of residuals for simulated galaxies (in the test set) across all three redshift bins. We define the residuals as the difference between the true value and the most probable value predicted by \gampen{}. The dashed vertical line represents $x = 0$, denoting cases with perfectly recovered parameter values. 
     The mean ($\mu$), median ($\tilde{\mu}$), and standard deviation ($\sigma$) of each residual distribution are listed in each panel.}
     \label{fig_c3:resi_sim_all_z}
 \end{figure*}
 
-In order to test the robustness of our simulation-trained framework, we compare the predictions made by \gampen{} on the test set to the true values determined from the simulation parameters. The results are similar across all redshift bins and closely follow what we determined previously in \citet{gampen_software_paper}. The histograms of residuals for \gampen{}'s output parameters are shown in Figure \ref{fig_c3:resi_sim_all_z} across all three redshift bins. Note that to make all three parameters dimensionless, we report the (Residual $R_e$)/$R_e$, instead of simply Residual $R_e$. For each histogram, we also show the mean ($\mu$), median ($\tilde{\mu}$), and standard deviation $(\sigma)$. The mean and median help demonstrate that the distributions are all centered around zero, and the standard deviation indicates the value of the ``typical error" made by the framework (i.e., $68.27\%$ of the time, \gampen{}'s prediction errors are less than this value).
+In order to test the robustness of our simulation-trained framework, we compare the predictions made by \gampen{} on the test set to the true values determined from the simulation parameters. The results are similar across all redshift bins and closely follow what we determined previously in Chapter \ref{ch:gampen}. The histograms of residuals for \gampen{}'s output parameters are shown in Figure \ref{fig_c3:resi_sim_all_z} across all three redshift bins. Note that to make all three parameters dimensionless, we report the (Residual $R_e$)/$R_e$, instead of simply Residual $R_e$. For each histogram, we also show the mean ($\mu$), median ($\tilde{\mu}$), and standard deviation $(\sigma)$. The mean and median help demonstrate that the distributions are all centered around zero, and the standard deviation indicates the value of the ``typical error" made by the framework (i.e., $68.27\%$ of the time, \gampen{}'s prediction errors are less than this value).
 
 Note that for the simulated data, the typical error made by \gampen{} increases with redshift. This is expected given that in our simulations, galaxies in the higher redshift bins are preferentially smaller, fainter, and have lower signal-to-noise ratios than their lower redshift counterparts---thus, these galaxies are harder to analyze morphologically for any image processing algorithm. However, for all the parameters across all redshift bins, the \gampen{} error is typically always $\lesssim 15\%$ for the simulated sample.
 
-We would like to note that \gampen{} does not explicitly predict the number of components a galaxy has, but we performed an analysis of its relative performance on single- and double-component galaxies in \citet{gampen_software_paper} (see Figure 15 therein). We found that accurately determining $L_B/L_T$ is more challenging for double-component galaxies (compared to single-component galaxies); and becomes even more difficult when one of the components strongly dominates the other.
+We would like to note that \gampen{} does not explicitly predict the number of components a galaxy has, but we performed an analysis of its relative performance on single- and double-component galaxies in Chapter \ref{ch:gampen} (see Figure \ref{fig_c2:residual_hist_bt_sep} therein). We found that accurately determining $L_B/L_T$ is more challenging for double-component galaxies (compared to single-component galaxies); and becomes even more difficult when one of the components strongly dominates the other.
 
 \subsection{Transfer Learning using Real Data} 
 \label{sec_c3:transfer_learning}
@@ -269,7 +269,7 @@ Transfer Learning as a data-science concept has been around since the late 1990s
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{tl_para_dist.png}
+    \includegraphics[width = 0.95\textwidth]{tl_para_dist.png}
     \caption{Magnitude and redshift distributions for all galaxies in each redshift bin, plotted along with the galaxies selected for transfer learning (before and after applying quality cuts, as described in \S \ref{sec_c3:galfitting}). Note that we plot density on the y-axis, not the number of samples. The total number of galaxies used for transfer learning is $\sim0.5\%$ of all the galaxies in our dataset. The relative density of some magnitude bins is higher than others (e.g., $18 < m \leq 20$ for low-z) because they span a smaller range while having roughly the same number of galaxies as the other bins.}
     \label{fig_c3:tl_para_dist}
 \end{figure*}
@@ -284,12 +284,12 @@ In order to artificially augment the number of galaxies being used for transfer 
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.7\textwidth]{dropout_calibration.png}
+    \includegraphics[width = 0.8\textwidth]{dropout_calibration.png}
     \caption{The calculated percentile coverage probabilities for different dropout rates for the low-z bin. Note that the coverage probabilities have been averaged over the three output variables. The coverage probabilities are defined as the percentage of the total test examples where the value determined using light profile fitting lies  within  a  particular confidence interval of the predicted distribution. A dropout rate of $4\times10^{-4}$ leads to coverage probabilities very close to their corresponding confidence levels. A similar process of tuning in the mid-z and high-z bins leads to an optimal dropout rate of $2\times10^{-4}$ in both of them.}
     \label{fig_c3:dropout_calibration}
 \end{figure*}
 
-Aside from the hyper-parameters mentioned in \S \ref{sec_c3:sim_training}, there is one more adjustable parameter in \gampen{}---the dropout rate, which directly affects the calculation of the epistemic uncertainties outlined in \S \ref{sec_c3:gampen}. On average, higher dropout rates lead networks to estimate higher epistemic uncertainties. To determine the optimal value for the dropout rate, during transfer learning, we trained variants of \gampen{} with dropout rates from $10^{-3}$ to $10^{-5}$, all with the same optimized values of momentum, learning rate, and batch size mentioned in Appendix \ref{ap:sec_c3:trained_models}.
+Aside from the hyper-parameters mentioned in \S \ref{sec_c3:sim_training}, there is one more adjustable parameter in \gampen{}---the dropout rate, which directly affects the calculation of the epistemic uncertainties outlined in \S \ref{sec_c2:uncertainties}. On average, higher dropout rates lead networks to estimate higher epistemic uncertainties. To determine the optimal value for the dropout rate, during transfer learning, we trained variants of \gampen{} with dropout rates from $10^{-3}$ to $10^{-5}$, all with the same optimized values of momentum, learning rate, and batch size mentioned in Appendix \ref{ap:sec_c3:trained_models}.
 
 To compare these models, we calculate the percentile coverage probabilities associated with each model, defined as the percentage of the total test examples where the parameter value determined using light profile fitting lies within a particular confidence interval of the predicted distribution. We calculate the coverage probabilities associated with the $68.27\%$, $95.45\%$, and $99.73\%$ central percentile confidence levels, corresponding to the $1\sigma$, $2\sigma$, and $3\sigma$ confidence levels for a normal distribution. For each distribution predicted by \gampen{}, we define the $68.27\%$ confidence interval as the region on the x-axis of the distribution that contains $68.27\%$ of the most probable values of the integrated probability distribution. To estimate the probability distribution function from the \gampen{} predictions (which are discrete), we use kernel density estimation, which is a non-parametric technique to estimate the probability density function of a random variable. 
 
@@ -386,9 +386,9 @@ After both rounds of training are complete, we apply the final trained \gampen{}
 \end{figure*}
 
 
-Using the procedure outlined in \S \ref{sec_c3:gampen} and Figure \ref{fig_c3:posterior_pred_workflow}, we use the trained \gampen{} frameworks to obtain joint probability distributions of all the output parameters for each of the $\sim 8$ million galaxies. Figure \ref{fig_c3:example_pred_dists} shows the marginalized posterior distributions for six randomly selected galaxies; along with the input cutouts fed to \gampen{}. All the predicted distributions are unimodal, smooth, and resemble Gaussian/skewed-Gaussian distributions. For each predicted distribution, the figure also shows the parameter space regions that contain $68.27\%$, $95.45\%$, and $99.73\%$ of the most probable values of the integrated probability distribution. We use kernel density estimation to estimate the probability distribution function (PDF; shown by a blue line in the figure) from the predicted values. The mode of this PDF is what we refer to as the ``predicted value" henceforth. The figure also demonstrates how \gampen{} predicts distributions of different widths based on the input frame (e.g., the $L_B/L_T$ distribution in the second row is wider compared to the first row), and we will explore this in more detail in \S \ref{sec_c3:uncertainties}. 
+Using the procedure outlined in Figure \ref{fig_c2:workflow}, we use the trained \gampen{} frameworks to obtain joint probability distributions of all the output parameters for each of the $\sim 8$ million galaxies. Figure \ref{fig_c3:example_pred_dists} shows the marginalized posterior distributions for six randomly selected galaxies; along with the input cutouts fed to \gampen{}. All the predicted distributions are unimodal, smooth, and resemble Gaussian/skewed-Gaussian distributions. For each predicted distribution, the figure also shows the parameter space regions that contain $68.27\%$, $95.45\%$, and $99.73\%$ of the most probable values of the integrated probability distribution. We use kernel density estimation to estimate the probability distribution function (PDF; shown by a blue line in the figure) from the predicted values. The mode of this PDF is what we refer to as the ``predicted value" henceforth. The figure also demonstrates how \gampen{} predicts distributions of different widths based on the input frame (e.g., the $L_B/L_T$ distribution in the second row is wider compared to the first row), and we will explore this in more detail in \S \ref{sec_c3:uncertainties}. 
 
-By design, \gampen{} predicts only physically possible values. This is especially apparent in the $L_B/L_T$ column of rows 1 and 4 of Figure \ref{fig_c3:example_pred_dists}. Note that to achieve this, we do not artificially truncate these distributions. Instead, we use data transformations, as outlined in \S \ref{sec_c3:transformations}. This ensures that the predicted $L_B/L_T$ values are always between 0 and 1. Similarly, we also ensure  that the $R_e$ and $F$ values predicted by \gampen{} are positive through appropriate transformations. 
+By design, \gampen{} predicts only physically possible values. This is especially apparent in the $L_B/L_T$ column of rows 1 and 4 of Figure \ref{fig_c3:example_pred_dists}. Note that to achieve this, we do not artificially truncate these distributions. Instead, we use data transformations, as outlined in \S \ref{sec_c2:training}. This ensures that the predicted $L_B/L_T$ values are always between 0 and 1. Similarly, we also ensure  that the $R_e$ and $F$ values predicted by \gampen{} are positive through appropriate transformations. 
 
 While performing quality checks on the predicted posteriors of all the $\sim 8$ million galaxies, we noticed that sometimes \gampen{} predicts $R_e$ and F values outside the parameter range on which it was trained (e.g., $m > 23$). It has been shown that while machine learning frameworks are excellent at interpolation, one should be extremely cautious while trying to extrapolate too much beyond the training set \citep[e.g.,][]{candela_09, recht_19, taori_20}. Thus, for each redshift bin, we exclude galaxies with predicted $R_e$ and $F$ values which are outside the upper and lower bounds of the training set by more than 0.5 arcsecs or 0.5 mags, respectively. This led to $\sim6\%$, $\sim2.5\%$, and $\sim1.2\%$ of the data being excluded in the low-, mid-, and high-z bins.
 
@@ -396,7 +396,7 @@ While performing quality checks on the predicted posteriors of all the $\sim 8$ 
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{stn_random.png}
+    \includegraphics[width = 0.95\textwidth]{stn_random.png}
     \caption{Examples of the transformation applied by the STN to two randomly selected galaxies from each redshift bin. The top row shows the input galaxy images, and the bottom row shows the corresponding output from the STN. The numbers in the top-left yellow boxes help correspond the output images to the input images. As can be seen, the STN learns to crop most secondary objects present in the input frame.}
     \label{fig_c3:stn_random}
 \end{figure*}
@@ -407,7 +407,7 @@ Figure \ref{fig_c3:stn_random} shows examples of the transformations applied by 
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{stn_min_max.png}
+    \includegraphics[width = 0.95\textwidth]{stn_min_max.png}
     \caption{(\textit{Left}): Galaxies in the low-z bin  with the lowest values of $s$ (i.e., the most aggressive crops) (\textit{Right}): Galaxies in the low-z bin with the highest values of $s$ (i.e., the least aggressive crops). The $s$ parameter denotes the fraction of the input image that was retained in the STN output. As can be seen, the STN correctly learns to apply the most aggressive crops to small galaxies; and the least aggressive crops to large galaxies.}
     \label{fig_c3:stn_min_max}
 \end{figure*}
@@ -431,7 +431,7 @@ In Figure \ref{fig_c3:cov_prob_all_z}, we show the coverage probabilities achiev
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{pred_true_all_z.png}
+    \includegraphics[width = 0.95\textwidth]{pred_true_all_z.png}
     \caption{The most probable parameter values predicted by \gampen{} for all galaxies in the test set plotted against the values determined using GALFIT. Galaxies are plotted in hexagonal bins of roughly equal size, and the number of galaxies in each bin is represented according to the logarithmic colorbar to the right of each panel. The top, middle, and bottom rows show the results for the low-, mid-, and high-z bins, respectively. The dashed black $y=x$ line represents the line of equality. Across all three redshift bins, values predicted by \gampen{} closely mirror the values obtained using light-profile fitting.}
     \label{fig_c3:pred_true_all_z}
 \end{figure*}
@@ -440,7 +440,7 @@ Having shown above that the posteriors predicted by \gampen{} are well calibrate
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{resi_all_z.png}
+    \includegraphics[width = 0.95\textwidth]{resi_all_z.png}
     \caption{Distributions of residuals for all galaxies in the test set; specifically, the differences between the values predicted by \gampen{} and those obtained via light-profile fitting. The top, middle, and bottom rows show the results for the low-, mid-, and high-z bins, respectively. The boxes in the top-left corner of each panel show the mean ($\mu$), median ($\tilde{\mu}$), and standard deviation ($\sigma$) of each residual distribution. The $\sigma$ of each distribution identifies the typical disagreement for each parameter (e.g., for the low-z bin, in $68.27\%$ cases, the predicted magnitude is within $\pm0.41$ of the value determined by light profile fitting). The dashed red vertical line marks  $x=0$.}
     \label{fig_c3:resi_all_z}
 \end{figure*}
@@ -450,19 +450,19 @@ the mean ($\mu$), median ($\tilde{\mu}$), and standard deviation ($\sigma$) of e
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_res_low_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_res_low_z.png}
     \caption{Residuals of the output parameters (difference between \gampen{} and GALFIT predictions) plotted against the values predicted by \gampen{} for all galaxies in the low-z test set. To make the y-axis dimensionless for all three parameters, we plot the fractional $R_e$ residuals instead of absolute values. This figure allows us to assign quality labels to \gampen{}'s predictions based on the output values (e.g., flagging regions of the parameter space with high levels of disagreement, as shown by the line-shaded region in the top-left panel). See \S\,\ref{sec_c3:gampen_v_galfit} for details. The equivalent figures for the mid- and high-z bins are shown in Appendix \ref{ap:sec_c3:2d_residuals}.}
     \label{fig_c3:2d_res_low_z}
 \end{figure*}
 
 Although Figures \ref{fig_c3:pred_true_all_z} and \ref{fig_c3:resi_all_z} indicate the overall agreement between \gampen{} and GALFIT, they do not reveal the dependence of this agreement on location in the parameter space. This is critical information as this identifies regions of parameter space where \gampen{} agrees especially well or badly with light-profile fitting results, so that future users can flag the reliability of predictions in these regions or use results only from certain regions of the parameter space for specific scientific analyses. Figure \ref{fig_c3:2d_res_low_z} shows the residuals for the three output parameters for the low-z bin plotted against the values predicted by \gampen{}. Note that in order to make the y-axis dimensionless for all three parameters, we plot the fractional $R_e$ residuals instead of absolute values. As in Figure \ref{fig_c3:pred_true_all_z},  we have split the parameter space into hexagonal bins and used a logarithmic color scale to denote the number of galaxies in each bin. The trends between the residuals and different parameters are very similar across all three redshift bins. Thus, to keep the main text concise, we have shown the plot for the low-z bin here and shown the same plot for the mid- and high-z bins in Appendix \ref{ap:sec_c3:2d_residuals}.
 
-For most of the panels, the large majority of galaxies are clustered uniformly around the black dashed line, $y = 0$, which denotes the ideal case of perfectly recovered parameters (assuming the GALFIT parameters are correct). There are a few notable features on the top row, which depicts the $L_B/L_T$ residuals.  In the top left panel, the $L_B/L_T$ residuals are highest near the limits of $L_B/L_T$. We noticed the same effect when testing \gampen{} with simulated galaxies in \citet{gampen_software_paper}, and refer to this as the ``edge effect" 
+For most of the panels, the large majority of galaxies are clustered uniformly around the black dashed line, $y = 0$, which denotes the ideal case of perfectly recovered parameters (assuming the GALFIT parameters are correct). There are a few notable features on the top row, which depicts the $L_B/L_T$ residuals.  In the top left panel, the $L_B/L_T$ residuals are highest near the limits of $L_B/L_T$. We noticed the same effect when testing \gampen{} with simulated galaxies in Chapter \ref{ch:gampen}, and refer to this as the ``edge effect" 
 %---that is, sometimes machine learning models perform poorly at the edges of the parameter space on which they were trained. Here 0 and 1 are the theoretical limits of $L_B/L_T$ and also depict the limits of the region on which \gampen{} was trained. 
 For $L_B/L_T$ values near the edges (i.e., when the disk/bulge component completely dominates over the other component), precisely determining $L_B/L_T$ is challenging for \gampen{} --- in fact, this is difficult for any image analysis algorithm). In some of these cases, \gampen{} assigns almost the entirety of the light to the dominant component, resulting in the streaks seen at the edges of the figure. Poor structural parameter determination for galaxies with $L_B/L_T < 0.2$ and $L_B/L_T>0.8$ have also been independently observed in other studies using different algorithms \citep[e.g.,][]{euclid_morph, galapagos}
 
 
-In order to mitigate this, \gampen{} users can choose to transform \gampen{}'s quantitative predictions in the region $0.2 \geq L_B/L_T \geq 0.8$ (demarcated by shaded lines in Figure \ref{fig_c3:2d_res_low_z}) to qualitative values such as ``highly bulge-dominated" ($L_B/L_T \geq 0.8$) or ``highly disk-dominated" ($L_B/L_T \leq 0.2$). We followed a similar procedure in \citet{gampen_software_paper} and found the net accuracy of these labels to be $\gtrapprox95\%$.
+In order to mitigate this, \gampen{} users can choose to transform \gampen{}'s quantitative predictions in the region $0.2 \geq L_B/L_T \geq 0.8$ (demarcated by shaded lines in Figure \ref{fig_c3:2d_res_low_z}) to qualitative values such as ``highly bulge-dominated" ($L_B/L_T \geq 0.8$) or ``highly disk-dominated" ($L_B/L_T \leq 0.2$). We followed a similar procedure in Chapter \ref{ch:gampen} and found the net accuracy of these labels to be $\gtrapprox95\%$.
 
 \textcolor{black}{The top-middle panel of Figure \ref{fig_c3:2d_res_low_z} also shows that $L_B/L_T$ residuals are higher for galaxies with smaller $R_e$. In other words, \gampen{} and GALFIT systematically disagree more for galaxies with smaller sizes---and this effect becomes more pronounced as the sizes become comparable to the seeing of the HSC-Wide Survey (\textit{g}-band: $0.79$ arcsec).} 
 
@@ -472,7 +472,7 @@ To comparatively evaluate the accuracy of \gampen{} and GALFIT specifically for 
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{2d_uncer_low_z.png}
+    \includegraphics[width = 0.95\textwidth]{2d_uncer_low_z.png}
     \caption{Uncertainties predicted by \gampen{} for each parameter plotted against the predicted values for the low-z test set. The $\sigma$ for each parameter is defined as the width of the $68.27\%$ confidence interval. Note that we plot fractional uncertainties for the radius in order to make the y-axis dimensionless for all three rows. The line-shaded region in the top-left panel shows the region where we recommend transforming quantitative $L_B/L_T$ predictions to qualitative labels (see \S \ref{sec_c3:gampen_v_galfit} for details).}
     \label{fig_c3:2d_uncer_low_z}
 \end{figure*}
@@ -483,10 +483,10 @@ Figure \ref{fig_c3:2d_uncer_low_z} shows the uncertainties for the three predict
 
 In Figure \ref{fig_c3:2d_res_low_z}, we saw that \gampen{}'s $L_B/L_T$ residuals are higher for lower values of $R_e$. Here, we see that \gampen{} accurately predicts higher $L_B/L_T$ uncertainties for lower values of $R_e$. This compensatory effect is what allows \gampen{} to achieve the calibrated coverage probabilities shown in Figure \ref{fig_c3:cov_prob_all_z}. 
 
-In the right column, we see that for all three parameters, the uncertainty in \gampen{}'s predictions increase for fainter galaxies. This is in line with what we expect and had seen in \citet{gampen_software_paper}---morphological parameters for fainter galaxies are more difficult to constrain compared to brighter galaxies and thus should have higher uncertainties. 
+In the right column, we see that for all three parameters, the uncertainty in \gampen{}'s predictions increase for fainter galaxies. This is in line with what we expect and had seen in Chapter \ref{ch:gampen}---morphological parameters for fainter galaxies are more difficult to constrain compared to brighter galaxies and thus should have higher uncertainties. 
 
 \textcolor{black}{The top left panel of Figure \ref{fig_c3:2d_uncer_low_z} shows that \gampen{} is reasonably certain of its predicted %$L_B/L_T$ values
-bulge-to-total ratio across the full range of values but appears slightly more certain when $L_B/L_T \leq 0.2$ or $L_B/L_T \geq 0.8$. We had also seen the same effect in \citet{gampen_software_paper} with simulated galaxies. We found that the smaller uncertainties at the limits corresponded to the single-component galaxies, while for the double-component galaxies, the edge effect is less pronounced (see Figure 15 of \citet{gampen_software_paper}). Here, we are seeing the same effect--- \gampen{}'s uncertainties at the edges are systematically lower for galaxies that can be described completely by only a disk or bulge component. These lower uncertainties also contribute to the higher residuals near the edges of $L_B/L_T$ (as wider distributions would reduce the number of galaxies with high residuals at the edges). However, as can be seen from the top left panel of Figure \ref{fig_c3:2d_uncer_low_z}, most of the galaxies with very low uncertainties lie in the region $0.2 \geq L_B/L_T \geq 0.8$, where we recommend transforming the quantitative $L_B/L_T$ predictions to qualitative labels, as outlined in \S \ref{sec_c3:gampen_v_galfit}}.
+bulge-to-total ratio across the full range of values but appears slightly more certain when $L_B/L_T \leq 0.2$ or $L_B/L_T \geq 0.8$. We had also seen the same effect in Chapter \ref{ch:gampen} with simulated galaxies. We found that the smaller uncertainties at the limits corresponded to the single-component galaxies, while for the double-component galaxies, the edge effect is less pronounced (see Figure \ref{fig_c2:residual_hist_bt_sep}). Here, we are seeing the same effect--- \gampen{}'s uncertainties at the edges are systematically lower for galaxies that can be described completely by only a disk or bulge component. These lower uncertainties also contribute to the higher residuals near the edges of $L_B/L_T$ (as wider distributions would reduce the number of galaxies with high residuals at the edges). However, as can be seen from the top left panel of Figure \ref{fig_c3:2d_uncer_low_z}, most of the galaxies with very low uncertainties lie in the region $0.2 \geq L_B/L_T \geq 0.8$, where we recommend transforming the quantitative $L_B/L_T$ predictions to qualitative labels, as outlined in \S \ref{sec_c3:gampen_v_galfit}}.
 
 The results shown in this section outline the primary advantage of using a Bayesian framework like \gampen{}--- even in situations where the network is not perfectly accurate, it can predict the right level of precision, allowing its predictions to be reliable and well-calibrated.
 
@@ -495,7 +495,7 @@ The results shown in this section outline the primary advantage of using a Bayes
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.7\textwidth]{cov_prob_euclud_comp.png}
+    \includegraphics[width = 0.8\textwidth]{cov_prob_euclud_comp.png}
     \caption{Percentile coverage probabilities for the $68.27\%$ confidence interval obtained by \gampen{} on our HSC sample compared to coverage probabilities obtained by various light-profile fitting algorithms on simulated Euclid data %as calculated in 
     (from \citealp{euclid_morph}). The rightmost set of bars shows the values calculated on the entire dataset, while the other sets display values calculated on sub-samples of galaxies with specific magnitude ranges (AB mag, shown on the x-axis). %As this figure shows, c
     Compared to light-profile fitting tools, the uncertainties predicted by \gampen{} are better calibrated by $\sim15-25\%$ overall and by as much as $\sim60\%$ for the brightest galaxies.}
@@ -526,14 +526,14 @@ It is likely that
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{gampen_v_simard.png}
+    \includegraphics[width = 0.95\textwidth]{gampen_v_simard.png}
     \caption{\gampen{} predictions plotted against values estimated by \citet{simard_11} for a cross-matched sample of $\sim20,000$ galaxies with $z < 0.2$ and $m < 19$. The density of points in each histogram is represented according to the logarithmic colorbar on the right. The black dots show the median y values in bins of equal width along the x-axis, with the error bars depicting the average $68.27\%$ and $95.45\%$ confidence intervals predicted by \gampen{} in that bin. The dash-dotted vertical line in the middle panel shows the median SDSS \gb{}-band seeing.}
     \label{fig_c3:gampen_v_simard}
 \end{figure*}
 
 \begin{figure*}[htb]
     \centering
-    \includegraphics[width = 0.9\textwidth]{gampen_v_lenstronomy.png}
+    \includegraphics[width = 0.95\textwidth]{gampen_v_lenstronomy.png}
     \caption{\gampen{} predictions plotted against values estimated by \citet{hsc_sersic} for a cross-matched sample of $\sim200,000$ galaxies with $0.5 < z \leq 0.75$ and $m \leq 23$. Similar to Figure \ref{fig_c3:gampen_v_simard}, we show the median y-values and associated error bars in bins of equal width along the x-axis. The dash-dotted vertical line in the middle panel shows the median HSC \ib{}-band seeing.}
     \label{fig_c3:gampen_v_lenstronomy}
 \end{figure*}
