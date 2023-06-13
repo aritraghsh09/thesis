@@ -19,6 +19,8 @@
 \usepackage{subfigure}
 \usepackage{multirow}
 \usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{2.5cm}}
+\newcolumntype{K}{>{\centering\arraybackslash}m{2.2cm}}
 \usepackage{hhline}
 %\usepackage{minted}
 \usepackage{listings}
@@ -55,6 +57,7 @@
 \usepackage{natbib}
 \usepackage{bibentry}
 \usepackage{commands}
+\usepackage{rotating}
 
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -93,9 +96,14 @@
 \newcommand\gamornet{G\textsc{a}M\textsc{or}N\textsc{et}}
 \newcommand\gampen{GaMPEN}
 \newcommand\lenstronomy{LENSTRONOMY}
+\newcommand\grizy{\textit{grizy}}
+\newcommand\uband{\textit{u}}
 \newcommand\gb{\textit{g}}
 \newcommand\rb{\textit{r}}
 \newcommand\ib{\textit{i}}
+\newcommand\zb{\textit{z}}
+\newcommand\yb{\textit{y}}
+\newcommand\om{\sim \mathcal{O}}
 
 
 \begin{document}
@@ -139,7 +147,10 @@ asdjnfjins adsnfij snadijfn in iasndfinsjidnf ijjsndifjnsijdnf isjnadfn aoisjdfn
 \begin{subappendices}
     \input{./hsc_morph/hsc_morph_appendix.tex}
 \end{subappendices}
-\input{./morph_den/paper}
+\input{./morph_den/morph_den.tex}
+\begin{subappendices}
+     \input{./morph_den/morph_den_appendix.tex}
+\end{subappendices}
 \input{./intro_and_conc/conc}
 
 \backmatter
