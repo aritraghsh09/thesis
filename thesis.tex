@@ -58,6 +58,20 @@
 \usepackage{bibentry}
 \usepackage{commands}
 \usepackage{rotating}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+
+\makeatletter
+\newcommand{\DrawLine}{%
+  \begin{tikzpicture}
+  \path[use as bounding box] (0,0) -- (\linewidth,0);
+  \draw[color=blue!75!black,dashed,dash phase=2pt]
+        (0-\kvtcb@leftlower-\kvtcb@boxsep,0)--
+        (\linewidth+\kvtcb@rightlower+\kvtcb@boxsep,0);
+  \end{tikzpicture}%
+  }
+\makeatother
+
 
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
