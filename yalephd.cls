@@ -243,7 +243,8 @@ class, modified by AG]
                  of\\
               Yale University\\
            in Candidacy for the Degree of\\
-         Doctor of Philosophy\par\vfil\vskip 6ex%
+         Doctor of Philosophy\par\vfil\vskip 1.5ex%
+         \includegraphics[width=0.37\textwidth]{diss_logo.png}\par\vfil\vskip 6ex%
                  by\\
               \@author\par\vskip 1.5em%
          Dissertation Director: \@advisorline\par
