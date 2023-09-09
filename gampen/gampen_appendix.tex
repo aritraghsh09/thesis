@@ -62,7 +62,7 @@ p(\boldsymbol{\omega} \mid \mathcal{D}) \propto p(\mathcal{D} \mid \boldsymbol{\
 \label{eq_c2:bayes_rule}
 \end{equation}
 
-In Equation\,\ref{eq_c2:bayes_rule}, $p(\boldsymbol{\omega})$ is the prior on the neural networks weights. The weight prior here is unimportant and what matters is the prior induced on the output parameters of \gampen{}. And as outlined above, we use an uninformative multivariate Gaussian prior to induce an uninformative prior on the output. Please refer to \cite{wilson_20} for a detained discussion on priors in Bayesian deep learning. 
+In Equation\,\ref{eq_c2:bayes_rule}, $p(\boldsymbol{\omega})$ is the prior on the neural networks weights -- which, for our case, happens to be Gaussian. Besides the weight prior, what also matters is the prior induced on the output parameters of \gampen{}. And as outlined above, we use a multivariate Gaussian prior for the output. Please refer to \cite{wilson_20} for a detained discussion on priors in Bayesian deep learning. 
 
 \sloppy For a regression task using a standard CNN, wherein the network outputs predictions  $\hat{\boldsymbol{Y}}_{n}\left(\boldsymbol{\hat{X}}_{n}, \boldsymbol{\omega}\right)$ for true values $\boldsymbol{Y}_{n}$ , one popular choice is to minimize the squared-error loss function $\sum_{n} \left\|\boldsymbol{Y}_n-\boldsymbol{\hat{Y}}_n\left(\boldsymbol{\hat{X}}_n, \boldsymbol{\omega}\right)\right\|^{2}$, where the sum over $n$ denotes a sum over the training set. However, in contrast to the traditional approach, for each new test image $\boldsymbol{\hat{X}}$, \gampen{} needs to predict the parameters of a multivariate Gaussian distribution, $\mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. 
 
